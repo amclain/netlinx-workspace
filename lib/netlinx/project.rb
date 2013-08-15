@@ -51,7 +51,10 @@ module NetLinx
         
       # Load systems.
       project.each_element 'System' do |e|
-        system = NetLinx::System.new element: e
+        system = NetLinx::System.new \
+          element: e,
+          project:  self
+          
         @systems << system
       end
     end

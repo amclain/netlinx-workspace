@@ -7,10 +7,14 @@ describe NetLinx::System do
   include NetLinx::Test::Compilable
   
   before do
-    @system = @object = NetLinx::System.new
+    @workspace = OpenStruct.new path: File.expand_path('test/unit/workspace/import-test')
+    @project = OpenStruct.new workspace: @workspace
+    @system = @object = NetLinx::System.new project: @project
   end
   
   after do
+    @workspace = nil
+    @project = nil
     @system = @object = nil
   end
   
@@ -19,56 +23,62 @@ describe NetLinx::System do
       file = OpenStruct.new \
         type: 'MasterSrc',
         name: 'import-test',
-        path: 'import-test.axs'
+        path: 'import-test.axs',
+        system: @system
       
       @system << file
       @system.compiler_target_files.count.must_equal 1
       assert @system.compiler_target_files.include? \
-        'import-test.axs'
+        File.expand_path 'import-test.axs', @workspace.path
     end
     
     it "lists .axi file paths under include paths" do
       file = OpenStruct.new \
         type: 'Include',
         name: 'import-include',
-        path: 'include\import-include.axi'
+        path: 'include\import-include.axi',
+        system: @system
       
       @system << file
-      @system.compiler_include_paths.first.must_equal 'include\import-include.axi'
+      @system.compiler_include_paths.first.must_equal \
+        File.expand_path 'include\import-include.axi', @workspace.path
     end
     
     it "lists source, compiled, and duet modules under module paths" do
       source_module = OpenStruct.new \
         type: 'Module',
         name: 'test-module-source',
-        path: 'module-source\test-module-source.axs'
+        path: 'module-source\test-module-source.axs',
+        system: @system
         
       compiled_module = OpenStruct.new \
         type: 'TKO',
         name: 'test-module-compiled',
-        path: 'module-compiled\test-module-compiled.tko'
+        path: 'module-compiled\test-module-compiled.tko',
+        system: @system
         
       duet_module = OpenStruct.new \
         type: 'DUET',
         name: 'duet-lib-pjlink_dr0_1_1',
-        path: 'duet-module\duet-lib-pjlink_dr0_1_1.jar'
+        path: 'duet-module\duet-lib-pjlink_dr0_1_1.jar',
+        system: @system
       
       @system.compiler_module_paths.count.must_equal 0
       
       @system << source_module
       @system.compiler_module_paths.count.must_equal 1
       assert @system.compiler_module_paths.include? \
-        'module-source\test-module-source.axs'
+        File.expand_path 'module-source\test-module-source.axs', @workspace.path
       
       @system << compiled_module
       @system.compiler_module_paths.count.must_equal 2
       assert @system.compiler_module_paths.include? \
-        'module-compiled\test-module-compiled.tko'
+        File.expand_path 'module-compiled\test-module-compiled.tko', @workspace.path
       
       @system << duet_module
       @system.compiler_module_paths.count.must_equal 3
       assert @system.compiler_module_paths.include? \
-        'duet-module\duet-lib-pjlink_dr0_1_1.jar'
+        File.expand_path 'duet-module\duet-lib-pjlink_dr0_1_1.jar', @workspace.path
     end
     
     it "returns an empty library path" do

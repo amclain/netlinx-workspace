@@ -53,7 +53,10 @@ module NetLinx
       
       # Load projects.
       doc.each_element '/Workspace/Project' do |e|
-        project = NetLinx::Project.new element: e
+        project = NetLinx::Project.new \
+          element:   e,
+          workspace: self
+          
         @projects << project
       end
     end
