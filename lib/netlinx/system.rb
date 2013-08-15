@@ -40,7 +40,10 @@ module NetLinx
     def compiler_target_files
       @files
         .select {|f| f.type == 'MasterSrc'}
-        .map {|f| File.expand_path f.path, f.system.project.workspace.path}
+        .map {|f| File.expand_path \
+          f.path,
+          f.system.project.workspace.path
+        }
     end
     
     def compiler_include_paths
