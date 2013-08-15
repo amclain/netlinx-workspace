@@ -30,6 +30,11 @@ module NetLinx
       @name
     end
     
+    # Directory the workspace resides in.
+    def path
+      File.dirname @file if @file
+    end
+    
     private
     
     # Load the workspace from a given NetLinx Studio .apw file.
