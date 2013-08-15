@@ -46,13 +46,19 @@ module NetLinx
     def compiler_include_paths
       @files
         .select {|f| f.type == 'Include'}
-        .map {|f| File.expand_path f.path, f.system.project.workspace.path}
+        .map {|f| File.expand_path \
+          File.dirname(f.path),
+          f.system.project.workspace.path
+        }
     end
     
     def compiler_module_paths
       @files
         .select {|f| f.type == 'Module' || f.type == 'TKO' || f.type == 'DUET'}
-        .map {|f| File.expand_path f.path, f.system.project.workspace.path}
+        .map {|f| File.expand_path \
+          File.dirname(f.path),
+          f.system.project.workspace.path
+        }
     end
     
     def compiler_library_paths

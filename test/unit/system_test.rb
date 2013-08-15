@@ -41,7 +41,7 @@ describe NetLinx::System do
       
       @system << file
       @system.compiler_include_paths.first.must_equal \
-        File.expand_path 'include\import-include.axi', @workspace.path
+        File.expand_path 'include', @workspace.path
     end
     
     it "lists source, compiled, and duet modules under module paths" do
@@ -68,17 +68,17 @@ describe NetLinx::System do
       @system << source_module
       @system.compiler_module_paths.count.must_equal 1
       assert @system.compiler_module_paths.include? \
-        File.expand_path 'module-source\test-module-source.axs', @workspace.path
+        File.expand_path 'module-source', @workspace.path
       
       @system << compiled_module
       @system.compiler_module_paths.count.must_equal 2
       assert @system.compiler_module_paths.include? \
-        File.expand_path 'module-compiled\test-module-compiled.tko', @workspace.path
+        File.expand_path 'module-compiled', @workspace.path
       
       @system << duet_module
       @system.compiler_module_paths.count.must_equal 3
       assert @system.compiler_module_paths.include? \
-        File.expand_path 'duet-module\duet-lib-pjlink_dr0_1_1.jar', @workspace.path
+        File.expand_path 'duet-module', @workspace.path
     end
     
     it "returns an empty library path" do
