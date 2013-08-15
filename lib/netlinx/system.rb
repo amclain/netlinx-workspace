@@ -1,4 +1,4 @@
-require 'ostruct'
+require 'netlinx/system_file'
 
 module NetLinx
   # A collection of resources loaded onto a NetLinx master.
@@ -63,24 +63,17 @@ module NetLinx
     
     def parse_xml_element(system)
       # Load system params.
-      @name = system.elements['Identifier'].text.strip
-      @id = system.elements['SysID'].text.strip.to_i
+      @name        = system.elements['Identifier'].text.strip
+      @id          = system.elements['SysID'].text.strip.to_i
       @description = system.elements['Comments'].text
       
       # Create system files.
       system.each_element 'File' do |e|
-        file_type = e.attributes['Type']
-        file_name = e.elements['Identifier'].text
-        file_path = e.elements['FilePathName'].text
-        file_description = e.elements['Comments'].text
+        system_file = NetLinx::SystemFile.new \
+          element: e,
+          system:  self
         
-        f = OpenStruct.new \
-          type: file_type,
-          name: file_name,
-          path: file_path,
-          description: file_description
-        
-        @files << f
+        @files << system_file
       end
     end
     
