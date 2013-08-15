@@ -10,6 +10,7 @@ module NetLinx
     attr_accessor :name
     attr_accessor :description
     attr_accessor :projects
+    attr_reader   :file
     
     def initialize(**kvargs)
       @name         = kvargs.fetch :name, ''

@@ -47,6 +47,13 @@ describe NetLinx::Workspace do
     @workspace.path.must_equal File.dirname(File.expand_path('import-test.apw', @workspace_path))
   end
   
+  it "exposes the path to the .apw workspace file" do
+    @workspace = NetLinx::Workspace.new \
+      file: File.expand_path('import-test.apw', @workspace_path)
+      
+    @workspace.file.must_equal File.expand_path('import-test.apw', @workspace_path)
+  end
+  
   it "can be initialized from a .axw file" do
     # Import the test project.
     @workspace = NetLinx::Workspace.new \
