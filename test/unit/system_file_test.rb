@@ -1,6 +1,6 @@
 require 'test_helper'
 require 'netlinx/system_file'
-require 'netlinx/test/compilable'
+require 'test/netlinx/compilable'
 
 describe NetLinx::SystemFile do
   before do

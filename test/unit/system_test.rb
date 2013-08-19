@@ -1,10 +1,10 @@
 require 'test_helper'
 require 'netlinx/system'
-require 'netlinx/test/compilable'
+require 'test/netlinx/compilable'
 require 'ostruct'
 
 describe NetLinx::System do
-  include NetLinx::Test::Compilable
+  include Test::NetLinx::Compilable
   
   before do
     @workspace = OpenStruct.new path: File.expand_path('test/unit/workspace/import-test')
