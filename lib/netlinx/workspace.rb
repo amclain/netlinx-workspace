@@ -36,6 +36,17 @@ module NetLinx
       File.dirname @file if @file
     end
     
+    # Compile all projects in this workspace.
+    def compile
+      compiler_results = []
+      
+      @projects.each do |project|
+        project.compile.each {|result| compiler_results << result}
+      end
+      
+      compiler_results
+    end
+    
     private
     
     # Load the workspace from a given NetLinx Studio .apw file.

@@ -67,4 +67,8 @@ describe NetLinx::Project do
     assert_respond_to @project, :workspace
   end
   
+  it "can invoke the compiler on itself" do
+    assert_respond_to @project, :compile
+  end
+  
 end

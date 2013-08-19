@@ -38,6 +38,13 @@ module NetLinx
       @name
     end
     
+    # Compile all systems in this project.
+    def compile
+      compiler_results = []
+      @systems.each {|system| compiler_results << (system.compile).first}
+      compiler_results
+    end
+    
     private
     
     def parse_xml_element(project)

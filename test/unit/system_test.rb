@@ -19,6 +19,10 @@ describe NetLinx::System do
   end
   
   describe "is compilable" do
+    it "can invoke the compiler on itself" do
+      assert_respond_to @system, :compile
+    end
+    
     it "exposes one master source file as the target file to compile" do
       file = OpenStruct.new \
         type: 'MasterSrc',

@@ -68,6 +68,15 @@ module NetLinx
       []
     end
     
+    # Compile this system.
+    def compile
+      # The compiler dependency is only needed if this method is called.
+      require 'netlinx/compiler'
+      
+      compiler = NetLinx::Compiler.new
+      compiler.compile self
+    end
+    
     private
     
     def parse_xml_element(system)
