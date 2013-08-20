@@ -30,6 +30,7 @@ module NetLinx
     # Alias to add a file.
     def <<(file)
       @files << file
+      file.system = self
     end
     
     # Returns the system name.

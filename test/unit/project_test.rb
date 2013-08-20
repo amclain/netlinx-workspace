@@ -61,6 +61,7 @@ describe NetLinx::Project do
     system = NetLinx::System.new
     @project << system
     @project.systems.first.must_equal system
+    system.project.must_equal @project
   end
   
   it "stores a reference to its parent workspace" do

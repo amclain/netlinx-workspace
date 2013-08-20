@@ -31,6 +31,7 @@ module NetLinx
     # Alias to add a system.
     def <<(system)
       @systems << system
+      system.project = self
     end
     
     # Returns the project name.

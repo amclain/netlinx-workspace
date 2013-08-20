@@ -128,6 +128,7 @@ describe NetLinx::System do
     f = OpenStruct.new
     @system << f
     @system.files.first.must_equal f
+    f.system.must_equal @system
   end
   
   it "stores a reference to its parent project" do

@@ -38,6 +38,7 @@ describe NetLinx::Workspace do
     project = NetLinx::Project.new
     @workspace << project
     @workspace.projects.first.must_equal project
+    project.workspace.must_equal @workspace
   end
   
   it "exposes a directory path that the workspace resides in" do

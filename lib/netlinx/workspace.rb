@@ -24,6 +24,7 @@ module NetLinx
     # Alias to add a project.
     def <<(project)
       @projects << project
+      project.workspace = self
     end
     
     # Returns the name of the workspace.
