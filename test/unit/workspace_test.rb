@@ -38,6 +38,7 @@ describe NetLinx::Workspace do
     project = NetLinx::Project.new
     @workspace << project
     @workspace.projects.first.must_equal project
+    project.workspace.must_equal @workspace
   end
   
   it "exposes a directory path that the workspace resides in" do
@@ -111,6 +112,31 @@ describe NetLinx::Workspace do
   
   it "can invoke the compiler on itself" do
     assert_respond_to @workspace, :compile
+  end
+  
+  it "can check if a file is included in the workspace" do
+    @workspace = NetLinx::Workspace.new \
+      file: File.expand_path('import-test.apw', @workspace_path)
+    
+    assert_respond_to @workspace, :include?
+    
+    @workspace.include?('import-test.axs').must_equal true,
+      'Can find file by relative path.'
+      
+    @workspace.include?(File.expand_path('include/import-include.axi', @workspace_path)).must_equal true,
+      'Can find file by absolute path.'
+    
+    @workspace.include?('import-test').must_equal true,
+      'Can find file by element name.'
+      
+    @workspace.include?('does-not-exist').must_equal false,
+      'Returns false for an element name that doesn\'t exist.'
+    
+    @workspace.include?('does-not-exist.axs').must_equal false,
+      'Returns false for a relative path that doesn\'t exist.'
+    
+    @workspace.include?(File.expand_path('does-not-exist.axi', @workspace_path)).must_equal false,
+      'Returns false for an absolute path that doesn\'t exist.'
   end
   
 end

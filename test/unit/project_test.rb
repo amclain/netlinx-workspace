@@ -61,6 +61,7 @@ describe NetLinx::Project do
     system = NetLinx::System.new
     @project << system
     @project.systems.first.must_equal system
+    system.project.must_equal @project
   end
   
   it "stores a reference to its parent workspace" do
@@ -69,6 +70,10 @@ describe NetLinx::Project do
   
   it "can invoke the compiler on itself" do
     assert_respond_to @project, :compile
+  end
+  
+  it "can check if a file is included in the project" do
+    assert_respond_to @project, :include?
   end
   
 end

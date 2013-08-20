@@ -31,11 +31,24 @@ module NetLinx
     # Alias to add a system.
     def <<(system)
       @systems << system
+      system.project = self
     end
     
     # Returns the project name.
     def to_s
       @name
+    end
+    
+    # Returns true if the project contains the specified file.
+    def include?(file)
+      included = false
+      
+      systems.each do |system|
+        included = system.include? file
+        break if included
+      end
+      
+      included
     end
     
     # Compile all systems in this project.

@@ -128,10 +128,28 @@ describe NetLinx::System do
     f = OpenStruct.new
     @system << f
     @system.files.first.must_equal f
+    f.system.must_equal @system
   end
   
   it "stores a reference to its parent project" do
     assert_respond_to @system, :project
+  end
+  
+  it "can check if a file is included in the system" do
+    assert_respond_to @system, :include?
+    
+    file = OpenStruct.new \
+      type: 'Include',
+      name: 'import-include',
+      path: 'include\import-include.axi',
+      system: @system
+    
+    @system << file
+    
+    @system.include?('import-include').must_equal true
+    @system.include?('include\import-include.axi').must_equal true
+    @system.include?('does-not-exist').must_equal false
+    @system.include?('include\does-not-exist.axi').must_equal false
   end
   
   describe "xml output" do

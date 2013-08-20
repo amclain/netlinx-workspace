@@ -24,6 +24,7 @@ module NetLinx
     # Alias to add a project.
     def <<(project)
       @projects << project
+      project.workspace = self
     end
     
     # Returns the name of the workspace.
@@ -34,6 +35,18 @@ module NetLinx
     # Directory the workspace resides in.
     def path
       File.dirname @file if @file
+    end
+    
+    # Returns true if the workspace contains the specified file.
+    def include?(file)
+      included = false
+      
+      projects.each do |project|
+        included = project.include? file
+        break if included
+      end
+      
+      included
     end
     
     # Compile all projects in this workspace.

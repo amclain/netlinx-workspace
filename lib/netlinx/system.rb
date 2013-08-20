@@ -30,6 +30,7 @@ module NetLinx
     # Alias to add a file.
     def <<(file)
       @files << file
+      file.system = self
     end
     
     # Returns the system name.
@@ -66,6 +67,24 @@ module NetLinx
     
     def compiler_library_paths
       []
+    end
+    
+    # Returns true if the project contains the specified file. 
+    def include?(file)
+      included = false
+      
+      @files.each do |f|
+        name_included = f.name.downcase.eql? file.downcase
+        
+        # TODO: This should probably be relative to the workspace path,
+        #       which can be found by traversing @project, @workspace.
+        path_included = file.gsub(/\\/, '/').include? f.path.gsub(/\\/, '/')
+        
+        included = name_included || path_included
+        break if included
+      end
+      
+      included
     end
     
     # Compile this system.
