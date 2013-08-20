@@ -74,6 +74,9 @@ module NetLinx
       
       @files.each do |f|
         name_included = f.name.downcase.eql? file.downcase
+        
+        # TODO: This should probably be relative to the workspace path,
+        #       which can be found by traversing @project, @workspace.
         path_included = file.gsub(/\\/, '/').include? f.path.gsub(/\\/, '/')
         
         included = name_included || path_included
