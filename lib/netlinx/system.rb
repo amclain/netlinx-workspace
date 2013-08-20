@@ -68,6 +68,21 @@ module NetLinx
       []
     end
     
+    # Returns true if the project contains the specified file. 
+    def include?(file)
+      included = false
+      
+      @files.each do |f|
+        name_included = f.name.downcase.eql? file.downcase
+        path_included = file.gsub(/\\/, '/').include? f.path.gsub(/\\/, '/')
+        
+        included = name_included || path_included
+        break if included
+      end
+      
+      included
+    end
+    
     # Compile this system.
     def compile
       # The compiler dependency is only needed if this method is called.

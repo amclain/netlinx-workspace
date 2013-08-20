@@ -71,4 +71,8 @@ describe NetLinx::Project do
     assert_respond_to @project, :compile
   end
   
+  it "can check if a file is included in the project" do
+    assert_respond_to @project, :include?
+  end
+  
 end

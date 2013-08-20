@@ -36,6 +36,18 @@ module NetLinx
       File.dirname @file if @file
     end
     
+    # Returns true if the workspace contains the specified file.
+    def include?(file)
+      included = false
+      
+      projects.each do |project|
+        included = project.include? file
+        break if included
+      end
+      
+      included
+    end
+    
     # Compile all projects in this workspace.
     def compile
       compiler_results = []

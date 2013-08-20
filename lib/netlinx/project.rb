@@ -38,6 +38,18 @@ module NetLinx
       @name
     end
     
+    # Returns true if the project contains the specified file.
+    def include?(file)
+      included = false
+      
+      systems.each do |system|
+        included = system.include? file
+        break if included
+      end
+      
+      included
+    end
+    
     # Compile all systems in this project.
     def compile
       compiler_results = []
