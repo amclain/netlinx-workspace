@@ -63,10 +63,10 @@ module NetLinx
     def parse_xml_element(project)
       # Load project params.
       @name           = project.elements['Identifier'].text.strip
-      @designer       = project.elements['Designer'].text.strip
-      @dealer         = project.elements['DealerID'].text.strip
-      @sales_order    = project.elements['SalesOrder'].text.strip
-      @purchase_order = project.elements['PurchaseOrder'].text.strip
+      @designer       = project.elements['Designer'].text
+      @dealer         = project.elements['DealerID'].text
+      @sales_order    = project.elements['SalesOrder'].text
+      @purchase_order = project.elements['PurchaseOrder'].text
       @description    = project.elements['Comments'].text
         
       # Load systems.

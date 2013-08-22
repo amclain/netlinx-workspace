@@ -109,13 +109,13 @@
 <PJS_File></PJS_File>
 <PJS_ConvertDate></PJS_ConvertDate>
 <PJS_CreateDate></PJS_CreateDate>
-<Comments>For testing Ruby import.</Comments>
+<Comments></Comments>
 <Project><Identifier>apw-test-project</Identifier>
-<Designer>Test Designer</Designer>
-<DealerID>Test Dealer</DealerID>
-<SalesOrder>Test Sales Order</SalesOrder>
-<PurchaseOrder>Test PO</PurchaseOrder>
-<Comments>Test project description.</Comments>
+<Designer></Designer>
+<DealerID></DealerID>
+<SalesOrder></SalesOrder>
+<PurchaseOrder></PurchaseOrder>
+<Comments></Comments>
 <System IsActive="true" Platform="Netlinx" Transport="TCPIP"><Identifier>apw-test-system</Identifier>
 <SysID>0</SysID>
 <TransSerial>COM1,38400,8,None,1,None</TransSerial>
@@ -129,7 +129,7 @@
 <IsAuthenticationEnabled>0</IsAuthenticationEnabled>
 <UserName></UserName>
 <Password></Password>
-<Comments>Test system description.</Comments>
+<Comments></Comments>
 <File CompileType="Netlinx" Type="MasterSrc"><Identifier>apw-test</Identifier>
 <FilePathName>apw-test.axs</FilePathName>
 <Comments></Comments>
