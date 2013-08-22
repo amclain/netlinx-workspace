@@ -13,9 +13,9 @@ module NetLinx
     attr_reader   :file
     
     def initialize(**kvargs)
-      @name         = kvargs.fetch :name, ''
-      @description  = kvargs.fetch :description, ''
-      @projects     = []
+      @name        = kvargs.fetch :name, ''
+      @description = kvargs.fetch :description, ''
+      @projects    = []
       
       @file = kvargs.fetch :file, nil
       load_workspace @file if @file

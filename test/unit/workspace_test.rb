@@ -1,7 +1,9 @@
 require 'test_helper'
 require 'netlinx/workspace'
+require 'test/netlinx/compile/invokable'
 
 describe NetLinx::Workspace do
+  include Test::NetLinx::Compile::Invokable
   
   before do
     @workspace = @object = NetLinx::Workspace.new
