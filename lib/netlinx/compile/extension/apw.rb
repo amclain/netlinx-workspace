@@ -9,8 +9,9 @@ module NetLinx
         # :nodoc:
         def self.get_handler
           handler = NetLinx::Compile::ExtensionHandler.new \
-            extensions: ['apw'],
-            handler_class: NetLinx::Workspace
+            extensions:     ['apw'],
+            is_a_workspace: true,
+            handler_class:  NetLinx::Workspace
         end
       end
     end
