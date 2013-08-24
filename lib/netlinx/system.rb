@@ -38,6 +38,7 @@ module NetLinx
       @name
     end
     
+    # See Test::NetLinx::Compilable.
     def compiler_target_files
       @files
         .select {|f| f.type == 'MasterSrc'}
@@ -47,6 +48,7 @@ module NetLinx
         }
     end
     
+    # See Test::NetLinx::Compilable.
     def compiler_include_paths
       @files
         .select {|f| f.type == 'Include'}
@@ -56,6 +58,7 @@ module NetLinx
         }
     end
     
+    # See Test::NetLinx::Compilable.
     def compiler_module_paths
       @files
         .select {|f| f.type == 'Module' || f.type == 'TKO' || f.type == 'DUET'}
@@ -65,6 +68,7 @@ module NetLinx
         }
     end
     
+    # See Test::NetLinx::Compilable.
     def compiler_library_paths
       []
     end

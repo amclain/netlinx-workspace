@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version   = version
   s.date      = Time.now.strftime '%Y-%m-%d'
   s.summary   = 'A library for working with AMX NetLinx Studio workspaces in Ruby.'
-  s.description = ''
+  s.description = "This library provides a developer API for working with NetLinx Studio workspaces in Ruby. It also adds compiler support to the NetLinx Compile gem for these workspaces."
   s.homepage  = 'https://sourceforge.net/projects/netlinx-workspace/'
   s.authors   = ['Alex McLain']
   s.email     = 'alex@alexmclain.com'
