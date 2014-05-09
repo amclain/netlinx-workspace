@@ -12,6 +12,20 @@ module NetLinx
     attr_accessor :projects
     attr_reader   :file
     
+    # Search backwards through directory tree and return the first workspace found.
+    def self.search, 
+      dir = File.expand_path '.'
+      while dir != File.expand_path('..', dir)
+        workspaces = Dir["#{dir}/*.apw"]
+        dir = File.expand_path('..', dir)
+        next if workspaces.empty?
+        
+        return workspaces.first
+      end
+      
+      nil
+    end
+    
     def initialize(**kvargs)
       @name        = kvargs.fetch :name, ''
       @description = kvargs.fetch :description, ''
