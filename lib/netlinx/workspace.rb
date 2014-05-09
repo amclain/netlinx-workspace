@@ -20,7 +20,7 @@ module NetLinx
         dir = File.expand_path('..', dir)
         next if workspaces.empty?
         
-        return workspaces.first
+        return new file: workspaces.first
       end
       
       nil
