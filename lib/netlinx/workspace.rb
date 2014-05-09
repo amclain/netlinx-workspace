@@ -13,8 +13,8 @@ module NetLinx
     attr_reader   :file
     
     # Search backwards through directory tree and return the first workspace found.
-    def self.search, 
-      dir = File.expand_path '.'
+    def self.search dir: nil
+      dir ||= File.expand_path '.'
       while dir != File.expand_path('..', dir)
         workspaces = Dir["#{dir}/*.apw"]
         dir = File.expand_path('..', dir)
