@@ -9,6 +9,46 @@ describe NetLinx::System do
   let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
   
+  let(:master_src_file) {
+    OpenStruct.new \
+      type: 'MasterSrc',
+      name: 'import-test',
+      path: 'import-test.axs',
+      system: subject
+  }
+  
+  let(:include_file) {
+    OpenStruct.new \
+      type: 'Include',
+      name: 'import-include',
+      path: 'include/import-include.axi',
+      system: subject
+  }
+  
+  let(:source_module) {
+    OpenStruct.new \
+      type: 'Module',
+      name: 'test-module-source',
+      path: 'module-source/test-module-source.axs',
+      system: subject
+  }
+  
+  let(:compiled_module) {
+    OpenStruct.new \
+      type: 'TKO',
+      name: 'test-module-compiled',
+      path: 'module-compiled/test-module-compiled.tko',
+      system: subject
+  }
+  
+  let(:duet_module) {
+    OpenStruct.new \
+      type: 'DUET',
+      name: 'duet-lib-pjlink_dr0_1_1',
+      path: 'duet-module/duet-lib-pjlink_dr0_1_1.jar',
+      system: subject
+  }
+  
   
   describe "is compilable" do
     
@@ -37,49 +77,19 @@ describe NetLinx::System do
     end
     
     it "exposes one master source file as the target file to compile" do
-      file = OpenStruct.new \
-        type: 'MasterSrc',
-        name: 'import-test',
-        path: 'import-test.axs',
-        system: subject
-      
-      subject << file
+      subject << master_src_file
       subject.compiler_target_files.count.should eq 1
       subject.compiler_target_files.should include \
         File.expand_path('import-test.axs', workspace.path)
     end
     
     it "lists .axi file paths under include paths" do
-      file = OpenStruct.new \
-        type: 'Include',
-        name: 'import-include',
-        path: 'include/import-include.axi',
-        system: subject
-      
-      subject << file
+      subject << include_file
       subject.compiler_include_paths.should include \
         File.expand_path('include', workspace.path)
     end
     
     it "lists source, compiled, and duet modules under module paths" do
-      source_module = OpenStruct.new \
-        type: 'Module',
-        name: 'test-module-source',
-        path: 'module-source/test-module-source.axs',
-        system: subject
-        
-      compiled_module = OpenStruct.new \
-        type: 'TKO',
-        name: 'test-module-compiled',
-        path: 'module-compiled/test-module-compiled.tko',
-        system: subject
-        
-      duet_module = OpenStruct.new \
-        type: 'DUET',
-        name: 'duet-lib-pjlink_dr0_1_1',
-        path: 'duet-module/duet-lib-pjlink_dr0_1_1.jar',
-        system: subject
-      
       subject.compiler_module_paths.count.should eq 0
       
       subject << source_module
@@ -154,13 +164,7 @@ describe NetLinx::System do
   it "can check if a file is included in the system" do
     subject.should respond_to :include?
     
-    file = OpenStruct.new \
-      type: 'Include',
-      name: 'import-include',
-      path: 'include/import-include.axi',
-      system: subject
-    
-    subject << file
+    subject << include_file
     
     subject.should include 'import-include'
     subject.should include 'include/import-include.axi'
@@ -172,14 +176,8 @@ describe NetLinx::System do
   describe "compilable path methods" do
     
     specify "don't contain duplicates" do
-      file = OpenStruct.new \
-        type: 'Include',
-        name: 'import-include',
-        path: 'include\import-include.axi',
-        system: subject
-      
-      subject << file
-      subject << file
+      subject << include_file
+      subject << include_file
       
       subject.compiler_include_paths.count.should eq 1
     end
@@ -191,7 +189,7 @@ describe NetLinx::System do
         file = OpenStruct.new \
           type: 'Include',
           name: 'import-include',
-          path: 'include\import-include.axi',
+          path: 'include\import-include.axi', # Dos-style backslash
           system: subject
         
         subject << file
