@@ -6,7 +6,7 @@ describe NetLinx::System do
   
   subject { NetLinx::System.new project: project }
   
-  let(:workspace) { OpenStruct.new path: File.expand_path('/workspace/import-test') }
+  let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
   
   
@@ -169,9 +169,25 @@ describe NetLinx::System do
   end
   
   
-  describe "compilable return values" do
+  describe "compilable path methods" do
     
     specify "don't contain duplicates"
+    
+    describe "return native Ruby (Unix-style) paths" do
+      
+      specify do
+        file = OpenStruct.new \
+          type: 'Include',
+          name: 'import-include',
+          path: 'include\import-include.axi',
+          system: subject
+        
+        subject << file
+        
+        subject.compiler_include_paths.first.end_with?('/include').should eq true
+      end
+      
+    end
     
   end
   

@@ -43,7 +43,7 @@ module NetLinx
       @files
         .select {|f| f.type == 'MasterSrc'}
         .map {|f| File.expand_path \
-          f.path,
+          f.path.gsub('\\', '/'),
           f.system.project.workspace.path
         }.uniq
     end
@@ -53,7 +53,7 @@ module NetLinx
       @files
         .select {|f| f.type == 'Include'}
         .map {|f| File.expand_path \
-          File.dirname(f.path),
+          File.dirname(f.path.gsub('\\', '/')),
           f.system.project.workspace.path
         }.uniq
     end
@@ -63,7 +63,7 @@ module NetLinx
       @files
         .select {|f| f.type == 'Module' || f.type == 'TKO' || f.type == 'DUET'}
         .map {|f| File.expand_path \
-          File.dirname(f.path),
+          File.dirname(f.path.gsub('\\', '/')),
           f.system.project.workspace.path
         }.uniq
     end
