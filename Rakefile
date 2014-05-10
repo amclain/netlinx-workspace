@@ -4,12 +4,7 @@ require 'yard'
 task :default => [:test]
 
 # Run tests.
-RSpec::Core::RakeTask.new :test do |c|
-  c.rspec_opts = 
-    '--color '\
-    '--format Fivemat '\
-    # '--fail-fast'
-end
+RSpec::Core::RakeTask.new :test
 
 # Build the gem.
 task :build => [:doc] do
