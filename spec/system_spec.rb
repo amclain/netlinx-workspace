@@ -57,8 +57,8 @@ describe NetLinx::System do
         system: subject
       
       subject << file
-      subject.compiler_include_paths.first.should eq \
-        File.expand_path 'include', workspace.path
+      subject.compiler_include_paths.should include \
+        File.expand_path('include', workspace.path)
     end
     
     it "lists source, compiled, and duet modules under module paths" do
