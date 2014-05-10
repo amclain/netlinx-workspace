@@ -6,7 +6,7 @@ describe NetLinx::System do
   
   subject { NetLinx::System.new project: project }
   
-  let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
+  let(:workspace) { OpenStruct.new path: File.expand_path('/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
   
   
@@ -53,7 +53,7 @@ describe NetLinx::System do
       file = OpenStruct.new \
         type: 'Include',
         name: 'import-include',
-        path: 'include\import-include.axi',
+        path: 'include/import-include.axi',
         system: subject
       
       subject << file
@@ -65,19 +65,19 @@ describe NetLinx::System do
       source_module = OpenStruct.new \
         type: 'Module',
         name: 'test-module-source',
-        path: 'module-source\test-module-source.axs',
+        path: 'module-source/test-module-source.axs',
         system: subject
         
       compiled_module = OpenStruct.new \
         type: 'TKO',
         name: 'test-module-compiled',
-        path: 'module-compiled\test-module-compiled.tko',
+        path: 'module-compiled/test-module-compiled.tko',
         system: subject
         
       duet_module = OpenStruct.new \
         type: 'DUET',
         name: 'duet-lib-pjlink_dr0_1_1',
-        path: 'duet-module\duet-lib-pjlink_dr0_1_1.jar',
+        path: 'duet-module/duet-lib-pjlink_dr0_1_1.jar',
         system: subject
       
       subject.compiler_module_paths.count.should eq 0
@@ -101,9 +101,12 @@ describe NetLinx::System do
     it "returns an empty library path" do
       subject.compiler_library_paths.count.should eq 0
     end
+    
   end
   
+  
   describe "stores project data" do
+    
     it "has a name" do
       name = 'import-test-system'
       subject.name = name
@@ -126,10 +129,10 @@ describe NetLinx::System do
       subject.files.should eq []
     end
     
-    it "has communication settings" do
-      pending
-    end
+    it "has communication settings"
+    
   end
+  
   
   it "outputs its name for to_s" do
     name = 'system name'
@@ -154,20 +157,29 @@ describe NetLinx::System do
     file = OpenStruct.new \
       type: 'Include',
       name: 'import-include',
-      path: 'include\import-include.axi',
+      path: 'include/import-include.axi',
       system: subject
     
     subject << file
     
     subject.should include 'import-include'
-    subject.should include 'include\import-include.axi'
+    subject.should include 'include/import-include.axi'
     subject.should_not include 'does-not-exist'
-    subject.should_not include 'include\does-not-exist.axi'
+    subject.should_not include 'include/does-not-exist.axi'
   end
   
-  describe "xml output" do
-    it "needs to be implemented" do
-      pending
-    end
+  
+  describe "compilable return values" do
+    
+    specify "don't contain duplicates"
+    
   end
+  
+  
+  describe "xml output" do
+    
+    specify
+    
+  end
+  
 end

@@ -45,7 +45,7 @@ module NetLinx
         .map {|f| File.expand_path \
           f.path,
           f.system.project.workspace.path
-        }
+        }.uniq
     end
     
     # See Test::NetLinx::Compilable.
@@ -55,7 +55,7 @@ module NetLinx
         .map {|f| File.expand_path \
           File.dirname(f.path),
           f.system.project.workspace.path
-        }
+        }.uniq
     end
     
     # See Test::NetLinx::Compilable.
@@ -65,7 +65,7 @@ module NetLinx
         .map {|f| File.expand_path \
           File.dirname(f.path),
           f.system.project.workspace.path
-        }
+        }.uniq
     end
     
     # See Test::NetLinx::Compilable.
