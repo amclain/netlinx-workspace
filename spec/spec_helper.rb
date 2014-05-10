@@ -10,6 +10,6 @@ RSpec.configure do |c|
   c.fail_fast = true if ENV['RSPEC_FAIL_FAST']
   
   # Set output formatter and enable color.
-  c.formatter = 'Fivemat'
-  c.color     = true
+  # c.formatter = 'Fivemat'
+  # c.color     = true
 end
