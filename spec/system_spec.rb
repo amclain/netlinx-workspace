@@ -171,9 +171,21 @@ describe NetLinx::System do
   
   describe "compilable path methods" do
     
-    specify "don't contain duplicates"
+    specify "don't contain duplicates" do
+      file = OpenStruct.new \
+        type: 'Include',
+        name: 'import-include',
+        path: 'include\import-include.axi',
+        system: subject
+      
+      subject << file
+      subject << file
+      
+      subject.compiler_include_paths.count.should eq 1
+    end
     
     describe "return native Ruby (Unix-style) paths" do
+      # Adds compatibility for CI tools.
       
       specify do
         file = OpenStruct.new \
