@@ -6,7 +6,7 @@ describe NetLinx::System do
   
   subject { NetLinx::System.new project: project }
   
-  let(:workspace) { OpenStruct.new path: File.expand_path('test/unit/workspace/import-test') }
+  let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
   
   
