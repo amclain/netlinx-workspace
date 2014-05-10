@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    netlinx-workspace (0.2.0)
+    netlinx-workspace (0.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -34,7 +34,7 @@ PLATFORMS
 
 DEPENDENCIES
   fivemat
-  netlinx-compile
+  netlinx-compile (~> 1.0.0)
   netlinx-workspace!
   pry
   rake

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables = [
   ]
   
-  s.add_development_dependency 'netlinx-compile'
+  s.add_development_dependency 'netlinx-compile', '~> 1.0.0'
   
   s.add_development_dependency 'rake'
   s.add_development_dependency 'yard'
