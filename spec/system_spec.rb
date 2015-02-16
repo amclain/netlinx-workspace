@@ -1,6 +1,7 @@
 require 'netlinx/system'
 require 'test/netlinx/compilable'
 require 'ostruct'
+require 'rexml/document'
 
 describe NetLinx::System do
   
@@ -51,7 +52,6 @@ describe NetLinx::System do
   
   
   describe "is compilable" do
-    
     
     describe "interface" do
       # Converted from Test::NetLinx::Compilable
@@ -204,7 +204,33 @@ describe NetLinx::System do
   
   describe "xml output" do
     
-    specify
+    subject {
+      NetLinx::System.new \
+        project: project,
+        id: id,
+        name: name,
+        description: description
+    }
+    
+    let(:element) { subject.to_xml_element }
+    let(:project) { REXML::Document.new }
+    
+    let(:name) { 'Test System' }
+    let(:id) { 2 }
+    let(:description) { 'Test description.' }
+    
+    it { should respond_to :to_xml_element }
+    
+    specify do
+      element.should be_a REXML::Element
+      
+      element.elements['Identifier'].first.should eq name
+      element.elements['SysID'].first.should eq id
+      element.elements['Comments'].first.should eq description
+    end
+    
+    specify "todo: communication settings"
+    specify "todo: file element"
     
   end
   

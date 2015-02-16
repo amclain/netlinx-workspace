@@ -1,4 +1,5 @@
 require 'netlinx/system_file'
+require 'rexml/document'
 
 module NetLinx
   # A collection of resources loaded onto a NetLinx master.
@@ -10,9 +11,9 @@ module NetLinx
     attr_accessor :project        # A reference to the system's parent project.
     attr_accessor :files
     
-    def initialize(**kvargs)
+    def initialize **kvargs
       @name        = kvargs.fetch :name,        ''
-      @id          = kvargs.fetch :id,          ''
+      @id          = kvargs.fetch :id,          0
       @description = kvargs.fetch :description, ''
       @project     = kvargs.fetch :project,     nil
       
@@ -28,17 +29,47 @@ module NetLinx
     end
     
     # Alias to add a file.
-    def <<(file)
+    def << file
       @files << file
       file.system = self
     end
     
-    # Returns the system name.
+    # @return the system name.
     def to_s
       @name
     end
     
-    # See Test::NetLinx::Compilable.
+    # @return an XML element representing this system.
+    def to_xml_element
+      REXML::Element.new('System').tap do |system|
+        system.attributes['IsActive']  = false
+        system.attributes['Platform']  = 'Netlinx'
+        system.attributes['Transport'] = 'Serial'
+        system.attributes['TransportEx'] = 'TCPIP'
+        
+        system.add_element('Identifier').tap { |e| e.text = name }
+        system.add_element('SysID').tap { |e| e.text = id }
+        system.add_element('Comments').tap { |e| e.text = description }
+        
+        # These don't seem to change in NetLinx Studio 4.0; possibly 3.x legacy.
+        # The 'Ex' suffixes are used.
+        system.add_element('TransTCPIP').tap { |e| e.text = '0.0.0.0' }
+        system.add_element('TransSerial').tap { |e| e.text = 'COM1,38400,8,None,1,None' }
+        
+        # TODO: Generate communication settings.
+        system.add_element('TransTCPIPEx').tap { |e| e.text = '0.0.0.0|1319|1|||' }
+        system.add_element('TransSerialEx').tap { |e| e.text = 'COM1|38400|8|None|1|||' }
+        system.add_element('TransUSBEx').tap { |e| e.text = '|||||' }
+        system.add_element('TransVNMEx').tap { |e| e.text = '||' }
+        
+        system.add_element('UserName').tap { |e| e.text = '' }
+        system.add_element('Password').tap { |e| e.text = '' }
+        
+        # TODO: Add file elements.
+      end
+    end
+    
+    # @see Test::NetLinx::Compilable.
     def compiler_target_files
       @files
         .select {|f| f.type == 'MasterSrc'}
@@ -48,7 +79,7 @@ module NetLinx
         }.uniq
     end
     
-    # See Test::NetLinx::Compilable.
+    # @see Test::NetLinx::Compilable.
     def compiler_include_paths
       @files
         .select {|f| f.type == 'Include'}
@@ -58,7 +89,7 @@ module NetLinx
         }.uniq
     end
     
-    # See Test::NetLinx::Compilable.
+    # @see Test::NetLinx::Compilable.
     def compiler_module_paths
       @files
         .select {|f| f.type == 'Module' || f.type == 'TKO' || f.type == 'DUET'}
@@ -68,13 +99,13 @@ module NetLinx
         }.uniq
     end
     
-    # See Test::NetLinx::Compilable.
+    # @see Test::NetLinx::Compilable.
     def compiler_library_paths
       []
     end
     
     # Returns true if the project contains the specified file. 
-    def include?(file)
+    def include? file
       included = false
       
       @files.each do |f|
@@ -102,7 +133,7 @@ module NetLinx
     
     private
     
-    def parse_xml_element(system)
+    def parse_xml_element system
       # Load system params.
       @name        = system.elements['Identifier'].text.strip
       @id          = system.elements['SysID'].text.strip.to_i
