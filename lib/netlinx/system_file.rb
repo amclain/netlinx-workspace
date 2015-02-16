@@ -14,15 +14,15 @@ module NetLinx
     # @option kwargs [String] :path ('') Relative file path.
     # @option kwargs [String] :description ('')
     # @option kwargs [:master,:source,:include,:duet,:tko,:module,:ir,:tp4,:tp5] :type (:master)
-    def initialize(**kvargs)
-      @system      = kvargs.fetch :system,      nil
+    def initialize **kwargs
+      @system      = kwargs.fetch :system,      nil
       
-      @name        = kvargs.fetch :name,        ''
-      @path        = kvargs.fetch :path,        ''
-      @description = kvargs.fetch :description, ''
-      @type        = kvargs.fetch :type,        :master
+      @name        = kwargs.fetch :name,        ''
+      @path        = kwargs.fetch :path,        ''
+      @description = kwargs.fetch :description, ''
+      @type        = kwargs.fetch :type,        :master
       
-      system_file_element = kvargs.fetch :element, nil
+      system_file_element = kwargs.fetch :element, nil
       parse_xml_element system_file_element if system_file_element
     end
     
@@ -56,7 +56,7 @@ module NetLinx
     
     private
     
-    def parse_xml_element(system_file)
+    def parse_xml_element system_file
       # Load system file params.
       @name        = system_file.elements['Identifier'].text.strip
       @type        = system_file.attributes['Type']
