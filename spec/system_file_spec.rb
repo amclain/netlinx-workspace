@@ -36,4 +36,11 @@ describe NetLinx::SystemFile do
   it "has a reference to its parent System object" do
     subject.should respond_to :system
   end
+  
+  describe "xml output" do
+    it { should respond_to :to_xml_element }
+    
+    specify
+  end
+  
 end
