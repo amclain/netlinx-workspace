@@ -50,14 +50,11 @@ describe NetLinx::System do
       system: subject
   }
   
-  
   describe "is compilable" do
-    
     describe "interface" do
       # Converted from Test::NetLinx::Compilable
       # https://github.com/amclain/netlinx-compile/blob/master/lib/test/netlinx/compilable.rb
-      
-      specify "implements methods" do
+      specify "compilable" do
         [
           :compiler_target_files,
           :compiler_include_paths,
@@ -68,9 +65,7 @@ describe NetLinx::System do
           subject.send(method).should be_a Array 
         }
       end
-      
     end
-    
     
     it "can invoke the compiler on itself" do
       subject.should respond_to :compile
@@ -111,12 +106,9 @@ describe NetLinx::System do
     it "returns an empty library path" do
       subject.compiler_library_paths.count.should eq 0
     end
-    
   end
   
-  
   describe "stores project data" do
-    
     it "has a name" do
       name = 'import-test-system'
       subject.name = name
@@ -140,9 +132,7 @@ describe NetLinx::System do
     end
     
     it "has communication settings"
-    
   end
-  
   
   it "outputs its name for to_s" do
     name = 'system name'
@@ -174,7 +164,6 @@ describe NetLinx::System do
   
   
   describe "compilable path methods" do
-    
     specify "don't contain duplicates" do
       subject << include_file
       subject << include_file
@@ -184,7 +173,6 @@ describe NetLinx::System do
     
     describe "return native Ruby (Unix-style) paths" do
       # Adds compatibility for CI tools.
-      
       specify do
         file = OpenStruct.new \
           type: 'Include',
@@ -196,20 +184,50 @@ describe NetLinx::System do
         
         subject.compiler_include_paths.first.end_with?('/include').should eq true
       end
-      
     end
-    
   end
   
   
-  describe "xml output" do
+  describe "communication settings" do
+    describe "network" do
+      describe "interface" do
+        it { should respond_to :ip_address }
+        it { should respond_to :ip_address= }
+        it { should respond_to :ip_port }
+        it { should respond_to :ip_port= }
+        it { should respond_to :ensure_availability }
+        it { should respond_to :ensure_availability= }
+      end
+    end
     
+    describe "serial" do
+      describe "interface" do
+        it { should respond_to :com_port }
+        it { should respond_to :com_port= }
+        it { should respond_to :baud_rate }
+        it { should respond_to :baud_rate= }
+        it { should respond_to :data_bits }
+        it { should respond_to :data_bits= }
+        it { should respond_to :parity }
+        it { should respond_to :parity= }
+        it { should respond_to :stop_bits }
+        it { should respond_to :stop_bits= }
+        it { should respond_to :flow_control }
+        it { should respond_to :flow_control= }
+      end
+    end
+  end
+  
+  describe "xml output" do
     subject {
       NetLinx::System.new \
         project: project,
         id: id,
         name: name,
-        description: description
+        description: description,
+        ip_address: ip_address,
+        com_port: com_port,
+        baud_rate: baud_rate
     }
     
     let(:element) { subject.to_xml_element }
@@ -218,6 +236,9 @@ describe NetLinx::System do
     let(:name) { 'Test System' }
     let(:id) { 2 }
     let(:description) { 'Test description.' }
+    let(:ip_address) { '192.168.1.2' }
+    let(:com_port) { :com2 }
+    let(:baud_rate) { 57600 }
     
     it { should respond_to :to_xml_element }
     
@@ -227,11 +248,11 @@ describe NetLinx::System do
       element.elements['Identifier'].first.should eq name
       element.elements['SysID'].first.should eq id
       element.elements['Comments'].first.should eq description
+      
+      element.elements['TransTCPIPEx'].first.should eq "#{ip_address}|1319|1|||"
+      element.elements['TransSerialEx'].first.should eq "COM2|57600|8|None|1|||"
     end
     
-    specify "todo: communication settings"
     specify "todo: file element"
-    
   end
-  
 end
