@@ -248,6 +248,8 @@ describe NetLinx::System do
     specify do
       element.should be_a REXML::Element
       
+      element.name.should eq 'System'
+      
       element.elements['Identifier'].first.should eq name
       element.elements['SysID'].first.should eq id
       element.elements['Comments'].first.should eq description

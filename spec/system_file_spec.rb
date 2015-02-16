@@ -58,6 +58,8 @@ describe NetLinx::SystemFile do
     specify do
       element.should be_a REXML::Element
       
+      element.name.should eq 'File'
+      
       element.attributes['CompileType'].should eq 'Netlinx'
       element.attributes['Type'].should eq 'Include'
       

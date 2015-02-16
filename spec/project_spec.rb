@@ -67,4 +67,46 @@ describe NetLinx::Project do
     subject.should respond_to :include?
   end
   
+  describe "xml output" do
+    subject {
+      NetLinx::Project.new(
+        name: name,
+        description: description,
+        dealer: dealer,
+        designer: designer,
+        sales_order: sales_order,
+        purchase_order: purchase_order
+      ).tap { |p| p << system }
+    }
+    
+    let(:element) { subject.to_xml_element }
+    
+    let(:system) { NetLinx::System.new name: system_name }
+    let(:system_name) { 'Test System' }
+    
+    let(:name)           { 'Test Project' }
+    let(:description)    { 'Project description.' }
+    let(:dealer)         { 'Project Dealer' }
+    let(:designer)       { 'Project Designer' }
+    let(:sales_order)    { 'Sales Order' }
+    let(:purchase_order) { 'Purchase Order' }
+    
+    it { should respond_to :to_xml_element }
+    
+    specify do
+      element.should be_a REXML::Element
+      
+      element.name.should eq 'Project'
+      
+      element.elements['Identifier'].first.should eq name
+      element.elements['Designer'].first.should eq designer
+      element.elements['DealerID'].first.should eq dealer
+      element.elements['SalesOrder'].first.should eq sales_order
+      element.elements['PurchaseOrder'].first.should eq purchase_order
+      element.elements['Comments'].first.should eq description
+      
+      element.elements['System/Identifier'].first.should eq system_name
+    end
+  end
+  
 end
