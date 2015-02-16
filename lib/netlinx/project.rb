@@ -1,7 +1,7 @@
 require 'netlinx/system'
 
 module NetLinx
-  # A collection of NeTLinx systems.
+  # A collection of NetLinx systems.
   # Workspace -> Project -> System
   class Project
     attr_accessor :name
