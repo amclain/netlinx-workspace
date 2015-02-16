@@ -1,0 +1,112 @@
+<!--
+    NetLinx Studio 4 Workspace File
+-->
+
+<!--
+    CurrentVersion: File format version; seems to correspond to NetLinx Studio
+        version, but minor number hasn't incremented for 4.1.
+-->
+<Workspace
+    CurrentVersion="4.0"
+>
+    <!-- Workspace name -->
+    <Identifier>Test Workspace</Identifier>
+    <!-- See CurrentVersion -->
+    <CreateVersion>4.0</CreateVersion>
+    <!-- Unknown -->
+    <PJS_File></PJS_File>
+    <PJS_ConvertDate></PJS_ConvertDate>
+    <PJS_CreateDate></PJS_CreateDate>
+    <!--  -->
+    <Comments>Workspace description.</Comments>
+    <Project>
+        <!-- Project name -->
+        <Identifier>Test Project</Identifier>
+        <Designer>Test Designer</Designer>
+        <DealerID>Test Dealer</DealerID>
+        <SalesOrder>Test Sales Order</SalesOrder>
+        <PurchaseOrder>Test Purchase Order</PurchaseOrder>
+        <Comments>Project description.</Comments>
+        <!--
+            IsActive: (true/false) True if this is the active system to compile
+                or file transfer.
+            Platform: (Netlinx,Axlink[deprecated]) Type of control system.
+            Transport: (Serial,TCPIP) Suspect this field is for backward
+                compatibility with 3.x. No noticeable changes in 4.x.
+                See TransportEx.
+            TransportEx: (Serial,TCPIP,USB,VNM) Communication transport to
+                connect to the NetLinx master controller.
+        -->
+        <System
+            IsActive="true"
+            Platform="Netlinx"
+            Transport="Serial"
+            TransportEx="TCPIP"
+        >
+            <!-- System name -->
+            <Identifier>Test System</Identifier>
+            <!--
+                Master controller system ID.
+                0 connects to any master at the given communication settings.
+                Or in other words, 0 prevents disconnection from a master
+                with a different ID.
+            -->
+            <SysID>0</SysID>
+            <!-- Suspect this is legacy for version 3.x -->
+            <TransTCPIP>0.0.0.0</TransTCPIP>
+            <TransSerial>COM1,115200,8,None,1,None</TransSerial>
+            <!-- End 3.x legacy -->
+            <!--
+                TCP/IP communication settings, pipe separated:
+                    IP address
+                    ICSLan port (1319)
+                    Automatically ping master controller to ensure availability (1)
+                    Connection name
+                    User Name
+                    Password
+            -->
+            <TransTCPIPEx>10.0.5.20|1319|1|Dev 3100||</TransTCPIPEx>
+            <!--
+                Serial communication settings, pipe separated:
+                    Com port name (COM1)
+                    Baud rate (38400)
+                    Data bits (8)
+                    Parity (None)
+                    Stop bits (1)
+                    Flow control (None)
+                    User Name
+                    Password
+            -->
+            <TransSerialEx>COM1|38400|8|None|1|None||</TransSerialEx>
+            <!--
+                USB communication settings:
+                    Unknown
+            -->
+            <TransUSBEx>|||||</TransUSBEx>
+            <!--
+                Virtual NetLinx Master (VNM) communication settings:
+                    IP address
+                    System number
+                    Network adapter description
+            -->
+            <TransVNMEx>10.0.0.1|1|&lt;Default&gt;</TransVNMEx>
+            <!-- Suspect this is legacy for version 3.x -->
+            <VirtualNetLinxMasterFlag>false</VirtualNetLinxMasterFlag>
+            <VNMSystemID>1</VNMSystemID>
+            <VNMIPAddress>10.0.0.1</VNMIPAddress>
+            <VNMMaskAddress>255.255.255.0</VNMMaskAddress>
+            <UserName></UserName>
+            <Password></Password>
+            <!-- End 3.x legacy -->
+            <Comments>System description.</Comments>
+            <File
+                CompileType="Netlinx"
+                Type="MasterSrc"
+            >
+                <Identifier>source_file</Identifier>
+                <FilePathName>source_file.axs</FilePathName>
+                <Comments></Comments>
+            </File>
+        </System>
+    </Project>
+</Workspace>
