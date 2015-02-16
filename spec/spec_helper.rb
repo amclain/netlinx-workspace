@@ -1,8 +1,14 @@
 require 'pry'
+require 'rspec/its'
 
 RSpec.configure do |c|
-  # Only run tests marked with iso:true.
-  c.filter_run_including iso:true
+  # Enable 'should' syntax
+  c.expect_with(:rspec) { |c| c.syntax = [:should, :expect] }
+  c.mock_with(:rspec)   { |c| c.syntax = [:should, :expect] }
+  
+  # Only run tests marked with focus:true.
+  # Enables use of fdescribe, fit, fspecify.
+  c.filter_run_including focus:true
   c.run_all_when_everything_filtered = true
   
   # Abort after first failure.

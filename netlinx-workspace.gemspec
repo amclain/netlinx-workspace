@@ -20,12 +20,13 @@ Gem::Specification.new do |s|
   s.executables = [
   ]
   
-  s.add_development_dependency 'netlinx-compile', '~> 1.0.0'
+  s.add_development_dependency 'netlinx-compile', '~> 1.0'
   
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'fivemat'
+  s.add_development_dependency 'rake', '~> 10.4'
+  s.add_development_dependency 'yard', '~> 0.8.7'
+  s.add_development_dependency 'rspec', '~> 3.2'
+  s.add_development_dependency 'rspec-its', '~> 1.1'
+  s.add_development_dependency 'fivemat', '~> 1.3'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rb-readline'
 end

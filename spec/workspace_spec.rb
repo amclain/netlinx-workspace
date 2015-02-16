@@ -99,9 +99,7 @@ describe NetLinx::Workspace do
       File.expand_path('module-source', workspace_path)
   end
   
-  it "outputs its xml string" do
-    pending
-  end
+  it "outputs its xml string"
   
   it "can invoke the compiler on itself" do
     subject.should respond_to :compile
