@@ -30,7 +30,7 @@
         <!--
             IsActive: (true/false) True if this is the active system to compile
                 or file transfer.
-            Platform: (Netlinx,Axlink[deprecated]) Type of control system.
+            Platform: (Netlinx) Type of control system.
             Transport: (Serial,TCPIP) Suspect this field is for backward
                 compatibility with 3.x. No noticeable changes in 4.x.
                 See TransportEx.

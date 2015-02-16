@@ -13,7 +13,7 @@ module NetLinx
     # @option kwargs [String] :name ('') Identifiable name.
     # @option kwargs [String] :path ('') Relative file path.
     # @option kwargs [String] :description ('')
-    # @option kwargs [:master,:include,:duet,:tko,:module] :type (:master)
+    # @option kwargs [:master,:source,:include,:duet,:tko,:module,:ir,:tp4,:tp5] :type (:master)
     def initialize(**kvargs)
       @system      = kvargs.fetch :system,      nil
       
@@ -26,7 +26,7 @@ module NetLinx
       parse_xml_element system_file_element if system_file_element
     end
     
-    # Print the SystemFile's name.
+    # @return the SystemFile's name.
     def to_s
       @name
     end
@@ -34,7 +34,23 @@ module NetLinx
     # @return an XML element representing this file.
     def to_xml_element
       REXML::Element.new('File').tap do |file|
+        file.attributes['CompileType'] = 'Netlinx'
         
+        file.attributes['Type'] = {
+          master:  'MasterSrc',
+          source:  'Source',
+          include: 'Include',
+          duet:    'DUET',
+          tko:     'TKO',
+          module:  'Module',
+          ir:      'IR',
+          tp4:     'TP4',
+          tp5:     'TP5',
+        }[type]
+        
+        file.add_element('Identifier').tap { |e| e.text = name }
+        file.add_element('FilePathName').tap { |e| e.text = path }
+        file.add_element('Comments').tap { |e| e.text = description }
       end
     end
     

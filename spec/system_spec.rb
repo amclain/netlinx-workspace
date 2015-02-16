@@ -231,7 +231,6 @@ describe NetLinx::System do
     }
     
     let(:element) { subject.to_xml_element }
-    let(:project) { REXML::Document.new }
     
     let(:name) { 'Test System' }
     let(:id) { 2 }

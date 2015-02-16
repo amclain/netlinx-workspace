@@ -38,9 +38,34 @@ describe NetLinx::SystemFile do
   end
   
   describe "xml output" do
+    subject {
+      NetLinx::SystemFile.new \
+        type: type,
+        name: name,
+        path: path,
+        description: description
+    }
+    
+    let(:element) { subject.to_xml_element }
+    
+    let(:type) { :include }
+    let(:name) { 'Test File' }
+    let(:path) { 'test_file.axi' }
+    let(:description) { 'File description.' }
+    
     it { should respond_to :to_xml_element }
     
-    specify
+    specify do
+      element.should be_a REXML::Element
+      
+      element.attributes['CompileType'].should eq 'Netlinx'
+      element.attributes['Type'].should eq 'Include'
+      
+      element.elements['Identifier'].first.should eq name
+      element.elements['FilePathName'].first.should eq path
+      element.elements['Comments'].first.should eq description
+      
+    end
   end
   
 end
