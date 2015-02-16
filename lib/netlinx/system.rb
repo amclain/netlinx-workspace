@@ -113,7 +113,7 @@ module NetLinx
         system.add_element('UserName').tap { |e| e.text = '' }
         system.add_element('Password').tap { |e| e.text = '' }
         
-        # TODO: Add file elements.
+        @files.each { |file| system << file.to_xml_element }
       end
     end
     

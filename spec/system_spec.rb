@@ -220,7 +220,7 @@ describe NetLinx::System do
   
   describe "xml output" do
     subject {
-      NetLinx::System.new \
+      NetLinx::System.new(
         project: project,
         id: id,
         name: name,
@@ -228,7 +228,11 @@ describe NetLinx::System do
         ip_address: ip_address,
         com_port: com_port,
         baud_rate: baud_rate
+      ).tap { |s| s << file }
     }
+    
+    let(:file) { NetLinx::SystemFile.new name: file_name }
+    let(:file_name) { 'Test File' }
     
     let(:element) { subject.to_xml_element }
     
@@ -250,8 +254,9 @@ describe NetLinx::System do
       
       element.elements['TransTCPIPEx'].first.should eq "#{ip_address}|1319|1|||"
       element.elements['TransSerialEx'].first.should eq "COM2|57600|8|None|1|||"
+      
+      element.elements['File/Identifier'].first.should eq file_name
     end
-    
-    specify "todo: file element"
   end
+  
 end
