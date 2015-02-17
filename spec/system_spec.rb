@@ -5,7 +5,23 @@ require 'rexml/document'
 
 describe NetLinx::System do
   
-  subject { NetLinx::System.new project: project }
+  subject {
+    NetLinx::System.new \
+      project: project,
+      id: id,
+      name: name,
+      description: description,
+      ip_address: ip_address,
+      com_port: com_port,
+      baud_rate: baud_rate
+  }
+  
+  let(:name) { 'Test System' }
+  let(:id) { 2 }
+  let(:description) { 'Test description.' }
+  let(:ip_address) { '192.168.1.2' }
+  let(:com_port) { :com2 }
+  let(:baud_rate) { 57600 }
   
   let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
@@ -109,34 +125,13 @@ describe NetLinx::System do
   end
   
   describe "stores project data" do
-    it "has a name" do
-      name = 'import-test-system'
-      subject.name = name
-      subject.name.should eq name
-    end
-    
-    it "has a system ID" do
-      id = 5
-      subject.id = id
-      subject.id.should eq id
-    end
-    
-    it "has a description" do
-      description = 'Test system description.'
-      subject.description = description
-      subject.description.should eq description
-    end
-    
-    it "has files" do
-      subject.files.should eq []
-    end
-    
-    it "has communication settings"
+    its(:name) { should eq name }
+    its(:id) { should eq id }
+    its(:description) { should eq description }
+    its(:files) { should eq [] }
   end
   
   it "outputs its name for to_s" do
-    name = 'system name'
-    subject.name = name
     subject.to_s.should eq name
   end
   
@@ -219,29 +214,12 @@ describe NetLinx::System do
   end
   
   describe "xml output" do
-    subject {
-      NetLinx::System.new(
-        project: project,
-        id: id,
-        name: name,
-        description: description,
-        ip_address: ip_address,
-        com_port: com_port,
-        baud_rate: baud_rate
-      ).tap { |s| s << file }
-    }
-    
     let(:file) { NetLinx::SystemFile.new name: file_name }
     let(:file_name) { 'Test File' }
     
     let(:element) { subject.to_xml_element }
     
-    let(:name) { 'Test System' }
-    let(:id) { 2 }
-    let(:description) { 'Test description.' }
-    let(:ip_address) { '192.168.1.2' }
-    let(:com_port) { :com2 }
-    let(:baud_rate) { 57600 }
+    before { subject << file }
     
     it { should respond_to :to_xml_element }
     
