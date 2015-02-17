@@ -3,30 +3,27 @@ require 'test/netlinx/compile/invokable'
 
 describe NetLinx::Workspace do
   
-  let(:workspace_path) { 'spec/workspace/import-test' }
+  subject {
+    NetLinx::Workspace.new \
+      name: name,
+      description: description
+  }
   
+  let(:name) { 'Test Workspace' }
+  let(:description) { 'Test Description' }
+  
+  let(:workspace_path) { 'spec/workspace/import-test' }
   
   it { should respond_to :compile }
   
-  it "has a name" do
-    name = 'my workspace'
-    subject.name = name
-    subject.name.should eq name
-  end
-  
-  it "has a description" do
-    description = 'test description'
-    subject.description = description
-    subject.description.should eq description
-  end
+  its(:name) { should eq name }
+  its(:description) { should eq description }
   
   it "contains projects" do
     subject.projects.should eq []
   end
   
   it "prints its name for to_s" do
-    name = 'test workspace'
-    subject.name = name
     subject.to_s.should eq name
   end
   
@@ -130,9 +127,7 @@ describe NetLinx::Workspace do
     subject.should_not include File.expand_path('does-not-exist.axi', workspace_path)
   end
   
-  
   describe "workspace search" do
-    
     subject { NetLinx::Workspace }
     
     let(:subpath) { "#{workspace_path}/include" }
@@ -147,7 +142,39 @@ describe NetLinx::Workspace do
     it "returns nil if no workspace found" do
       subject.search(dir: '/').should be nil
     end
+  end
+  
+  describe "xml output" do
+    let(:element) { subject.to_xml_element }
     
+    let(:project) { NetLinx::Project.new name: project_name }
+    let(:project_name) { 'Test Project' }
+    
+    before { subject << project }
+    
+    describe "element" do
+      it { should respond_to :to_xml_element }
+      
+      specify do
+        element.should be_a REXML::Element
+        
+        element.name.should eq 'Workspace'
+        
+        element.attributes['CurrentVersion'].should eq '4.0'
+        
+        element.elements['Identifier'].first.should eq name
+        element.elements['CreateVersion'].first.should eq '4.0'
+        element.elements['Comments'].first.should eq description
+        
+        element.elements['Project/Identifier'].first.should eq project_name
+      end
+    end
+    
+    describe "string" do
+      it { should respond_to :to_xml }
+      
+      specify
+    end
   end
   
 end

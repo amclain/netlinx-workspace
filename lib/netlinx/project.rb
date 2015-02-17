@@ -68,7 +68,7 @@ module NetLinx
       compiler_results
     end
     
-    # @return an XML element representing this system.
+    # @return [REXML::Element] an XML element representing this project.
     def to_xml_element
       REXML::Element.new('Project').tap do |project|
         project.add_element('Identifier').tap { |e| e.text = name }

@@ -31,7 +31,7 @@ module NetLinx
       @name
     end
     
-    # @return an XML element representing this file.
+    # @return [REXML::Element] an XML element representing this file.
     def to_xml_element
       REXML::Element.new('File').tap do |file|
         file.attributes['CompileType'] = 'Netlinx'

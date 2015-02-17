@@ -83,7 +83,7 @@ module NetLinx
       @name
     end
     
-    # @return an XML element representing this system.
+    # @return [REXML::Element] an XML element representing this system.
     def to_xml_element
       REXML::Element.new('System').tap do |system|
         system.attributes['IsActive']  = false

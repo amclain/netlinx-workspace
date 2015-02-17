@@ -26,17 +26,19 @@ module NetLinx
       nil
     end
     
-    def initialize(**kvargs)
-      @name        = kvargs.fetch :name, ''
-      @description = kvargs.fetch :description, ''
+    # @option kwargs [String] :name ('') Workspace name.
+    # @option kwargs [String] :description ('')
+    def initialize **kwargs
+      @name        = kwargs.fetch :name, ''
+      @description = kwargs.fetch :description, ''
       @projects    = []
       
-      @file = kvargs.fetch :file, nil
+      @file = kwargs.fetch :file, nil
       load_workspace @file if @file
     end
     
     # Alias to add a project.
-    def <<(project)
+    def << project
       @projects << project
       project.workspace = self
     end
@@ -51,8 +53,8 @@ module NetLinx
       File.dirname @file if @file
     end
     
-    # Returns true if the workspace contains the specified file.
-    def include?(file)
+    # @return true if the workspace contains the specified file.
+    def include? file
       included = false
       
       projects.each do |project|
@@ -74,10 +76,28 @@ module NetLinx
       compiler_results
     end
     
+    # @return [REXML::Element] an XML element representing this workspace.
+    def to_xml_element
+      REXML::Element.new('Workspace').tap do |workspace|
+        workspace.attributes['CurrentVersion'] = '4.0'
+        
+        workspace.add_element('Identifier').tap { |e| e.text = name }
+        workspace.add_element('CreateVersion').tap { |e| e.text = '4.0' }
+        workspace.add_element('Comments').tap { |e| e.text = description }
+        
+        @projects.each { |project| workspace << project.to_xml_element }
+      end
+    end
+    
+    # @return [String] an XML string representing this workspace.
+    def to_xml
+      raise NotImplementedError
+    end
+    
     private
     
     # Load the workspace from a given NetLinx Studio .apw file.
-    def load_workspace(file)
+    def load_workspace file
       raise LoadError, "File does not exist at:\n#{file}" unless File.exists? file
       
       doc = nil
