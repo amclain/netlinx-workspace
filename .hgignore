@@ -1,4 +1,5 @@
 # Ruby
+coverage/
 \.lock$
 \.gem$
 doc/
