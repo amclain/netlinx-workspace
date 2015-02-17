@@ -1,4 +1,5 @@
 require 'netlinx/workspace'
+require 'netlinx/compiler'
 require 'test/netlinx/compile/invokable'
 
 describe NetLinx::Workspace do
@@ -96,8 +97,27 @@ describe NetLinx::Workspace do
       File.expand_path('module-source', workspace_path)
   end
   
-  it "can invoke the compiler on itself" do
-    subject.should respond_to :compile
+  describe "can invoke the compiler on itself" do
+    let(:project) { NetLinx::Project.new name: 'Test Project' }
+    
+    let(:system_1) { NetLinx::System.new name: 'Test System 1' }
+    let(:system_2) { NetLinx::System.new name: 'Test System 2' }
+    
+    before {
+      subject << project
+      project << system_1
+      project << system_2
+    }
+    
+    it { should respond_to :compile }
+    
+    specify do
+      mock_compiler = double()
+      NetLinx::Compiler.should_receive(:new).twice { mock_compiler }
+      mock_compiler.should_receive(:compile).twice { [] }
+      
+      subject.compile
+    end
   end
   
   it "can check if a file is included in the workspace" do
