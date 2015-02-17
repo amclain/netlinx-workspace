@@ -90,8 +90,15 @@ module NetLinx
     end
     
     # @return [String] an XML string representing this workspace.
-    def to_xml
-      raise NotImplementedError
+    def to_xml indent: 4
+      str = '<?xml version="1.0" encoding="UTF-8"?>' + "\n"
+      
+      REXML::Document.new.tap do |doc|
+        doc << to_xml_element
+        doc.write output: str, indent: indent
+      end
+      
+      str
     end
     
     private

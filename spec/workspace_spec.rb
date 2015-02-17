@@ -96,8 +96,6 @@ describe NetLinx::Workspace do
       File.expand_path('module-source', workspace_path)
   end
   
-  it "outputs its xml string"
-  
   it "can invoke the compiler on itself" do
     subject.should respond_to :compile
   end
@@ -145,14 +143,14 @@ describe NetLinx::Workspace do
   end
   
   describe "xml output" do
-    let(:element) { subject.to_xml_element }
-    
     let(:project) { NetLinx::Project.new name: project_name }
     let(:project_name) { 'Test Project' }
     
     before { subject << project }
     
     describe "element" do
+      let(:element) { subject.to_xml_element }
+      
       it { should respond_to :to_xml_element }
       
       specify do
@@ -171,9 +169,17 @@ describe NetLinx::Workspace do
     end
     
     describe "string" do
+      let(:xml_string) { subject.to_xml }
+      
       it { should respond_to :to_xml }
       
-      specify
+      specify do
+        xml_string.should be_a String
+        
+        xml_string.should include name
+        xml_string.should include description
+        xml_string.should include project_name
+      end
     end
   end
   
