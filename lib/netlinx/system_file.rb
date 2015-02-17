@@ -36,17 +36,7 @@ module NetLinx
       REXML::Element.new('File').tap do |file|
         file.attributes['CompileType'] = 'Netlinx'
         
-        file.attributes['Type'] = {
-          master:  'MasterSrc',
-          source:  'Source',
-          include: 'Include',
-          duet:    'DUET',
-          tko:     'TKO',
-          module:  'Module',
-          ir:      'IR',
-          tp4:     'TP4',
-          tp5:     'TP5',
-        }[type]
+        file.attributes['Type'] = type_lookup[type]
         
         file.add_element('Identifier').tap { |e| e.text = name }
         file.add_element('FilePathName').tap { |e| e.text = path }
@@ -56,12 +46,27 @@ module NetLinx
     
     private
     
+    # @reutrn lookup table for symbol to XML NetLinx file types.
+    def type_lookup
+      {
+        master:  'MasterSrc',
+        source:  'Source',
+        include: 'Include',
+        duet:    'DUET',
+        tko:     'TKO',
+        module:  'Module',
+        ir:      'IR',
+        tp4:     'TP4',
+        tp5:     'TP5',
+      }
+    end
+    
     def parse_xml_element system_file
       # Load system file params.
-      @name        = system_file.elements['Identifier'].text.strip
-      @type        = system_file.attributes['Type']
-      @path        = system_file.elements['FilePathName'].text.strip
-      @description = system_file.elements['Comments'].text
+      @name        = system_file.elements['Identifier'].text.strip || ''
+      @type        = type_lookup.invert[system_file.attributes['Type']] || :master
+      @path        = system_file.elements['FilePathName'].text.strip || ''
+      @description = system_file.elements['Comments'].text || ''
     end
     
   end

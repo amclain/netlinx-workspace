@@ -28,7 +28,7 @@ describe NetLinx::System do
   
   let(:master_src_file) {
     OpenStruct.new \
-      type: 'MasterSrc',
+      type: :master,
       name: 'import-test',
       path: 'import-test.axs',
       system: subject
@@ -36,7 +36,7 @@ describe NetLinx::System do
   
   let(:include_file) {
     OpenStruct.new \
-      type: 'Include',
+      type: :include,
       name: 'import-include',
       path: 'include/import-include.axi',
       system: subject
@@ -44,7 +44,7 @@ describe NetLinx::System do
   
   let(:source_module) {
     OpenStruct.new \
-      type: 'Module',
+      type: :module,
       name: 'test-module-source',
       path: 'module-source/test-module-source.axs',
       system: subject
@@ -52,7 +52,7 @@ describe NetLinx::System do
   
   let(:compiled_module) {
     OpenStruct.new \
-      type: 'TKO',
+      type: :tko,
       name: 'test-module-compiled',
       path: 'module-compiled/test-module-compiled.tko',
       system: subject
@@ -60,7 +60,7 @@ describe NetLinx::System do
   
   let(:duet_module) {
     OpenStruct.new \
-      type: 'DUET',
+      type: :duet,
       name: 'duet-lib-pjlink_dr0_1_1',
       path: 'duet-module/duet-lib-pjlink_dr0_1_1.jar',
       system: subject
@@ -157,7 +157,6 @@ describe NetLinx::System do
     subject.should_not include 'include/does-not-exist.axi'
   end
   
-  
   describe "compilable path methods" do
     specify "don't contain duplicates" do
       subject << include_file
@@ -170,7 +169,7 @@ describe NetLinx::System do
       # Adds compatibility for CI tools.
       specify do
         file = OpenStruct.new \
-          type: 'Include',
+          type: :include,
           name: 'import-include',
           path: 'include\import-include.axi', # Dos-style backslash
           system: subject
@@ -181,7 +180,6 @@ describe NetLinx::System do
       end
     end
   end
-  
   
   describe "communication settings" do
     describe "network" do

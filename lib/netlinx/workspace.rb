@@ -2,7 +2,6 @@ require 'rexml/document'
 require 'netlinx/project'
 
 module NetLinx
-  
   # A NetLinx Studio workspace.
   # Collection of projects.
   # Workspace -> Project -> System
@@ -90,7 +89,9 @@ module NetLinx
     end
     
     # @return [String] an XML string representing this workspace.
-    def to_xml indent: 4
+    # 
+    # @todo REXML bug forces :indent to be -1 or else erroneous line feeds are added.
+    def to_xml indent: -1
       str = '<?xml version="1.0" encoding="UTF-8"?>' + "\n"
       
       REXML::Document.new.tap do |doc|
@@ -98,7 +99,14 @@ module NetLinx
         doc.write output: str, indent: indent
       end
       
-      str
+      str + "\n"
+    end
+    
+    # Generate a {NetLinx::Workspace} from an XML string.
+    # @return self
+    def parse_xml string
+      parse_xml_element REXML::Document.new(string)
+      self
     end
     
     private
@@ -112,12 +120,16 @@ module NetLinx
         doc = REXML::Document.new f
       end
       
+      parse_xml_element doc
+    end
+    
+    def parse_xml_element root
       # Load workspace params.
-      @name        = doc.elements['/Workspace/Identifier'].text.strip
-      @description = doc.elements['/Workspace/Comments'].text
-      
+      @name        = root.elements['/Workspace/Identifier'].text.strip || ''
+      @description = root.elements['/Workspace/Comments'].text || ''
+        
       # Load projects.
-      doc.each_element '/Workspace/Project' do |e|
+      root.each_element '/Workspace/Project' do |e|
         project = NetLinx::Project.new \
           element:   e,
           workspace: self

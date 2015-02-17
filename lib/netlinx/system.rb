@@ -5,16 +5,16 @@ module NetLinx
   # A collection of resources loaded onto a NetLinx master.
   # Workspace -> Project -> System
   class System
-    attr_accessor :name
-    attr_accessor :id
-    attr_accessor :description
     # A reference to the system's parent project.
     attr_accessor :project
     attr_accessor :files
     
+    attr_accessor :name
+    attr_accessor :id
+    attr_accessor :description
+    
     attr_accessor :ip_address
     attr_accessor :ip_port
-    # Ping the master controller to ensure availability before connecting.
     attr_accessor :ensure_availability
     
     attr_accessor :com_port
@@ -120,7 +120,7 @@ module NetLinx
     # @see Test::NetLinx::Compilable.
     def compiler_target_files
       @files
-        .select {|f| f.type == 'MasterSrc'}
+        .select {|f| f.type == :master}
         .map {|f| File.expand_path \
           f.path.gsub('\\', '/'),
           f.system.project.workspace.path
@@ -130,7 +130,7 @@ module NetLinx
     # @see Test::NetLinx::Compilable.
     def compiler_include_paths
       @files
-        .select {|f| f.type == 'Include'}
+        .select {|f| f.type == :include}
         .map {|f| File.expand_path \
           File.dirname(f.path.gsub('\\', '/')),
           f.system.project.workspace.path
@@ -140,7 +140,7 @@ module NetLinx
     # @see Test::NetLinx::Compilable.
     def compiler_module_paths
       @files
-        .select {|f| f.type == 'Module' || f.type == 'TKO' || f.type == 'DUET'}
+        .select {|f| f.type == :module || f.type == :tko || f.type == :duet}
         .map {|f| File.expand_path \
           File.dirname(f.path.gsub('\\', '/')),
           f.system.project.workspace.path
@@ -152,7 +152,7 @@ module NetLinx
       []
     end
     
-    # Returns true if the project contains the specified file. 
+    # @return [Boolean] true if the project contains the specified file. 
     def include? file
       included = false
       
@@ -183,9 +183,28 @@ module NetLinx
     
     def parse_xml_element system
       # Load system params.
-      @name        = system.elements['Identifier'].text.strip
-      @id          = system.elements['SysID'].text.strip.to_i
-      @description = system.elements['Comments'].text
+      @name        = system.elements['Identifier'].text.strip || ''
+      @id          = system.elements['SysID'].text.strip.to_i || 0
+      @description = system.elements['Comments'].text || ''
+      
+      if system.elements['TransTCPIPEx'] # Workspace v4.0
+        tcpip = (system.elements['TransTCPIPEx'].text || '').split('|')
+        
+        @ip_address  = tcpip[0] || '0.0.0.0'
+        @ip_port     = (tcpip[1] || 1319).to_i
+        @ensure_availability = (tcpip[2] == '0') ? false : true
+      end
+      
+      if system.elements['TransSerialEx'] # Workspace v4.0
+        serial = (system.elements['TransSerialEx'].text || '').split('|')
+        
+        @com_port     = (serial[0] || :com1).to_s.downcase.to_sym
+        @baud_rate    = (serial[1] || 38400).to_i
+        @data_bits    = (serial[2] || 8).to_i
+        @parity       = (serial[3] || :none).to_s.downcase.to_sym
+        @stop_bits    = (serial[4] || 1).to_i
+        @flow_control = (serial[5] || :none).to_s.downcase.to_sym
+      end
       
       # Create system files.
       system.each_element 'File' do |e|
