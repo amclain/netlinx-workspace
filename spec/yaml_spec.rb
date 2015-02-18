@@ -41,7 +41,7 @@ describe NetLinx::Workspace::YAML do
         system.ip_address.should eq '192.168.1.2'
         system.ip_port.should eq 1319
         
-        system.files.map { |f| [f.path, f] }.to_h.tap do |file_list|
+        Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
           file_list.should include 'MyClient Conference Room.axs'
           file_list['MyClient Conference Room.axs'].type.should eq :master
           file_list['MyClient Conference Room.axs'].name.should eq system.name
