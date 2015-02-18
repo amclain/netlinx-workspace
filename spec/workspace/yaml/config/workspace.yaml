@@ -1,0 +1,16 @@
+workspace:
+  description: Workspace description.
+
+  projects:
+    -
+      name: Test Project
+      designer: Test Designer
+      dealer_id: 123
+      sales_order: 456
+      purchase_order: 789
+      description: Project description.
+
+      systems:
+        -
+          name: Test System
+          connection: 192.168.1.2 # COM1 38400

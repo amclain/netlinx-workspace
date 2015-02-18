@@ -1,0 +1,10 @@
+systems:
+  -
+    name: Production
+    active: true # First system defaults to active if not specified.
+    connection: 192.168.1.2 # COM1 38400
+    files: include/**/*.axi
+  -
+    name: Test Suite
+    connection: 192.168.1.2 # COM1 38400
+    files: test/include/**/*.axi

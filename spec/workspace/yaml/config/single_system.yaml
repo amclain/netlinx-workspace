@@ -1,0 +1,11 @@
+systems:
+  -
+    name: Client - Project
+    connection: 192.168.1.2 # COM1 38400
+    files: # Automatically glob these files from root if not specified.
+      - include/**/*.axi
+      - ir/**/*.irl
+      - touch panel/**/*.TP4
+      - touch panel/**/*.TP5
+    excluded_files:
+      - include/excluded_file.axi
