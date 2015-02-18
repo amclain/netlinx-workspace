@@ -1,5 +1,9 @@
+# Gem convenience includes.
+require_relative 'workspace/yaml'
+
+# File includes.
 require 'rexml/document'
-require 'netlinx/project'
+require_relative 'project'
 
 module NetLinx
   # A NetLinx Studio workspace.

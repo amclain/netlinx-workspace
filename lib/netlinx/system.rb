@@ -1,5 +1,5 @@
-require 'netlinx/system_file'
 require 'rexml/document'
+require_relative 'system_file'
 
 module NetLinx
   # A collection of resources loaded onto a NetLinx master.

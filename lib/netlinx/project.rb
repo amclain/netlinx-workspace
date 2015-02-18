@@ -1,5 +1,5 @@
-require 'netlinx/system'
 require 'rexml/document'
+require_relative 'system'
 
 module NetLinx
   # A collection of NetLinx systems.
