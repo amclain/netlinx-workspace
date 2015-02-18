@@ -6,5 +6,23 @@ systems:
     files: include/**/*.axi
   -
     name: Test Suite
-    connection: 192.168.1.2 # COM1 38400
+    id: 2
+    description: For testing code.
+    connection:
+      host: 192.168.253.2
+      port: 5000
     files: test/include/**/*.axi
+  -
+    name: Serial Connection 1
+    connection: COM5
+  -
+    name: Serial Connection 2
+    connection: COM2:57600
+  -
+    name: Serial Connection 3
+    connection:
+      port: com3
+      baud_rate: 115200
+      data_bits: 7
+      parity: even
+      stop_bits: 2
