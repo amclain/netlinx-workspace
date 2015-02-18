@@ -135,12 +135,14 @@ describe NetLinx::Workspace::YAML do
       end
       
       specify "test included files"
+      specify "device mapping"
     end
     
     describe "workspace" do
       let(:file) { 'workspace' }
       specify
       specify "test included files"
+      specify "device mapping"
     end
   end
   
