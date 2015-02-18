@@ -95,6 +95,7 @@ module NetLinx
     # @return [String] an XML string representing this workspace.
     # 
     # @todo REXML bug forces :indent to be -1 or else erroneous line feeds are added.
+    #   https://bugs.ruby-lang.org/issues/10864
     def to_xml indent: -1
       str = '<?xml version="1.0" encoding="UTF-8"?>' + "\n"
       
