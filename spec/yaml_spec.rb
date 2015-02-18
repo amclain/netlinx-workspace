@@ -8,7 +8,11 @@ describe NetLinx::Workspace::YAML do
   it { should respond_to :parse_file }
   
   describe "parse" do
-    subject { NetLinx::Workspace::YAML.parse_file "spec/workspace/yaml/config/#{file}" }
+    subject {
+      NetLinx::Workspace::YAML.parse_file \
+        "spec/workspace/yaml/#{file}/#{file}.config.yaml"
+    }
+    
     let(:workspace) { subject }
     
     def project
@@ -22,7 +26,7 @@ describe NetLinx::Workspace::YAML do
     before { workspace.should be_a NetLinx::Workspace }
     
     describe "single system" do
-      let(:file) { 'single_system.yaml' }
+      let(:file) { 'single_system' }
       let(:name) { 'MyClient Conference Room' }
       
       specify do
@@ -43,7 +47,7 @@ describe NetLinx::Workspace::YAML do
     end
     
     describe "multiple systems" do
-      let(:file) { 'multiple_systems.yaml' }
+      let(:file) { 'multiple_systems' }
       let(:name) { 'Production' }
       
       specify do
@@ -108,7 +112,7 @@ describe NetLinx::Workspace::YAML do
     end
     
     describe "workspace" do
-      let(:file) { 'workspace.yaml' }
+      let(:file) { 'workspace' }
       specify
       specify "test included files"
     end
