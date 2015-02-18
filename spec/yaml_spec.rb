@@ -23,7 +23,7 @@ describe NetLinx::Workspace::YAML do
     
     describe "single system" do
       let(:file) { 'single_system.yaml' }
-      let(:name) { 'Client - Project' }
+      let(:name) { 'MyClient Conference Room' }
       
       specify do
         workspace.name.should eq name
