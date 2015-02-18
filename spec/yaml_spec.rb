@@ -8,10 +8,7 @@ describe NetLinx::Workspace::YAML do
   it { should respond_to :parse_file }
   
   describe "parse" do
-    subject {
-      NetLinx::Workspace::YAML.parse_file \
-        "spec/workspace/yaml/#{file}/#{file}.config.yaml"
-    }
+    subject { NetLinx::Workspace::YAML.parse_file "#{file}.config.yaml" }
     
     let(:workspace) { subject }
     
@@ -24,6 +21,8 @@ describe NetLinx::Workspace::YAML do
     end
     
     before { workspace.should be_a NetLinx::Workspace }
+    
+    around { |test| Dir.chdir("spec/workspace/yaml/#{file}") { test.run } }
     
     describe "single system" do
       let(:file) { 'single_system' }
@@ -41,9 +40,36 @@ describe NetLinx::Workspace::YAML do
         system.description.should eq 'System description.'
         system.ip_address.should eq '192.168.1.2'
         system.ip_port.should eq 1319
+        
+        system.files.map { |f| [f.path, f] }.to_h.tap do |file_list|
+          file_list.should include 'MyClient Conference Room.axs'
+          file_list['MyClient Conference Room.axs'].type.should eq :master
+          file_list['MyClient Conference Room.axs'].name.should eq system.name
+          
+          file_list.should include 'include/audio.axi'
+          file_list['include/audio.axi'].type.should eq :include
+          file_list['include/audio.axi'].name.should eq 'audio'
+          file_list.should include 'include/projector.axi'
+          file_list['include/projector.axi'].type.should eq :include
+          file_list.should include 'ir/Comcast,Comcast,xfinity,Unknown,1.irl'
+          file_list['ir/Comcast,Comcast,xfinity,Unknown,1.irl'].type.should eq :ir
+          file_list.should include 'ir/LG,LG,Unknown,Unknown,1.irl'
+          file_list['ir/LG,LG,Unknown,Unknown,1.irl'].type.should eq :ir
+          file_list.should include 'touch_panel/Admin iPad.TP4'
+          file_list['touch_panel/Admin iPad.TP4'].type.should eq :tp4
+          file_list.should include 'touch_panel/Conference Room Table.TP5'
+          file_list['touch_panel/Conference Room Table.TP5'].type.should eq :tp5
+          
+          file_list.should_not include 'MyClient Conference Room.tko'
+          file_list.should_not include 'MyClient Conference Room.tkn'
+          file_list.should_not include 'exclude/do_not_include.axi'
+          file_list.should_not include 'exclude/do_not_include.irl'
+          file_list.should_not include 'exclude/do_not_include.TP4'
+          file_list.should_not include 'include/excluded_file.axi'
+        end
       end
       
-      specify "test included files"
+      specify "device mapping"
     end
     
     describe "multiple systems" do

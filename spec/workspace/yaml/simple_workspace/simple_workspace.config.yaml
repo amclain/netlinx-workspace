@@ -12,4 +12,4 @@ projects:
     systems:
       -
         name: Test System
-        connection: 192.168.1.2 # COM1 38400
+        connection: 192.168.1.2

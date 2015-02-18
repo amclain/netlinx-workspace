@@ -19,13 +19,45 @@ module NetLinx
           workspace << project
           
           yaml_systems.each do |yaml_system|
-            NetLinx::System.new.tap do |system|
+            project << NetLinx::System.new.tap do |system|
               system.name = yaml_system['name'] if yaml_system['name']
               system.id = yaml_system['id'] if yaml_system['id']
               system.description = yaml_system['description'] if yaml_system['description']
               
               parse_connection_node system, yaml_system['connection']
-              project << system
+              
+              system << NetLinx::SystemFile.new(
+                path: "#{system.name}.axs",
+                name: system.name,
+                type: :master
+              )
+              
+              yaml_files = yaml_system['files']
+              if yaml_files
+                files = Dir[*yaml_files]
+                
+                yaml_excluded_files = yaml_system['excluded_files']
+                files = files - Dir[*yaml_excluded_files] if yaml_excluded_files
+                
+                files.each do |file_path|
+                  system << NetLinx::SystemFile.new.tap do |file|
+                    file.path = file_path
+                    file.name = File.basename(file_path).gsub /\.\w+\z/, ''
+                    
+                    file.type = {
+                      :axs => :source,
+                      :axi => :include,
+                      :jar => :duet,
+                      :tko => :tko,
+                      :irl => :ir,
+                      :tp4 => :tp4,
+                      :tp5 => :tp5,
+                    }[File.extname(file_path)[1..-1].downcase.to_sym]
+                    
+                    # TODO: Detect axs/tko modules.
+                  end
+                end
+              end
             end
           end
         else

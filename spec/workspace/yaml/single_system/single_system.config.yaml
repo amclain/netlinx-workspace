@@ -3,8 +3,8 @@ systems:
     name: MyClient Conference Room
     id: 3
     description: System description.
-    connection: 192.168.1.2 # COM1 38400
-    files: # Automatically glob these files from root if not specified.
+    connection: 192.168.1.2
+    files: # Automatically glob these files from project root if not specified.
       - include/**/*.axi
       - ir/**/*.irl
       - touch_panel/**/*.TP4
