@@ -1,1 +1,1 @@
-require 'netlinx/workspace'
+require_relative 'workspace'

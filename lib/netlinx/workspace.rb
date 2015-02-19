@@ -3,7 +3,7 @@ require_relative 'workspace/yaml'
 
 # File includes.
 require 'rexml/document'
-require_relative 'project'
+require_relative 'workspace/project'
 
 module NetLinx
   # A NetLinx Studio workspace.

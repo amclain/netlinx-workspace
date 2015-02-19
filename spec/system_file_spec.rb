@@ -1,4 +1,4 @@
-require 'netlinx/system_file'
+require 'netlinx/workspace/system_file'
 require 'test/netlinx/compilable'
 
 describe NetLinx::SystemFile do

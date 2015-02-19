@@ -1,4 +1,4 @@
-require 'netlinx/system'
+require 'netlinx/workspace/system'
 require 'test/netlinx/compilable'
 require 'ostruct'
 require 'rexml/document'

@@ -1,4 +1,4 @@
-require 'netlinx/project'
+require 'netlinx/workspace/project'
 
 describe NetLinx::Project do
   
