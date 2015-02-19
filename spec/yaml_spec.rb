@@ -60,6 +60,10 @@ describe NetLinx::Workspace::YAML do
           file_list.should include 'touch_panel/Conference Room Table.TP5'
           file_list['touch_panel/Conference Room Table.TP5'].type.should eq :tp5
           
+          file_list.should include 'include2/matrix.axi'
+          file_list['include/audio.axi'].type.should eq :include
+          file_list['include/audio.axi'].name.should eq 'matrix'
+          
           file_list.should_not include 'MyClient Conference Room.tko'
           file_list.should_not include 'MyClient Conference Room.tkn'
           file_list.should_not include 'exclude/do_not_include.axi'
