@@ -85,6 +85,10 @@ module NetLinx
       @type        = type_lookup.invert[system_file.attributes['Type']] || :master
       @path        = system_file.elements['FilePathName'].text.strip || ''
       @description = system_file.elements['Comments'].text || ''
+      
+      system_file.each_element 'DeviceMap' do |device_map|
+        @devices << device_map.attributes['DevAddr'].match(/.*?\[(.*?)\]/)[1]
+      end
     end
     
   end

@@ -214,12 +214,19 @@ describe NetLinx::Workspace do
       }
       
       let(:file) {
-        NetLinx::SystemFile.new \
+        NetLinx::SystemFile.new(
           type: :include,
           name: 'test-file',
           path: 'include/test-file.axi',
           description: 'Test file description.'
+        ).tap do |file|
+          file << dps_1
+          file << dps_2
+        end
       }
+      
+      let(:dps_1) { '10001:1:0' }
+      let(:dps_2) { '10002:1:0' }
       
       before { project << system; system << file }
       
@@ -259,6 +266,8 @@ describe NetLinx::Workspace do
         new_file.path.should        eq file.path
         new_file.description.should eq file.description
         new_file.type.should        eq file.type
+        
+        new_file.devices.should eq [dps_1, dps_2]
       end
     end
     
