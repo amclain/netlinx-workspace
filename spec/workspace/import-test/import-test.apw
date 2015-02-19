@@ -4,6 +4,7 @@
 <!-- Common Elements -->
 <!ELEMENT Identifier (#PCDATA)>
 <!ELEMENT Comments (#PCDATA)>
+<!ELEMENT MasterDirectory (#PCDATA)>
 <!ELEMENT CreationDate (#PCDATA)>
 
 <!-- Workspace Elements-->
@@ -42,15 +43,16 @@
 
 <!ELEMENT System  (  Identifier,
                  SysID,
-                 TransSerial?,
-                 TransModem?,
                  TransTCPIP?,
+                 TransSerial?,
+                 TransTCPIPEx?,
+                 TransSerialEx?,
+                 TransUSBEx?,
+                 TransVNMEx?,
                  VirtualNetLinxMasterFlag?,
-                 VNMRestoreIPSettings?,
                  VNMSystemID?,
                  VNMIPAddress?,
                  VNMMaskAddress?,
-                 IsAuthenticationEnabled?,
                  UserName?,
                  Password?,
                  Comments?,
@@ -59,18 +61,20 @@
 <!ATTLIST System
       IsActive   (true | false)   "false"
       Platform   (Axcess | Netlinx)   "Axcess"
-      Transport   (Serial | Modem | TCPIP) "Serial">
+      Transport   (Serial | Modem | TCPIP) "Serial"
+      TransportEx   (Serial | USB | TCPIP | VNM) "Serial">
 
 <!ELEMENT SysID (#PCDATA)>
 <!ELEMENT TransSerial (#PCDATA)>
-<!ELEMENT TransModem (#PCDATA)>
 <!ELEMENT TransTCPIP (#PCDATA)>
-<!ELEMENT VirtualNetLinxMasterFlag (#PCDATA)>
-<!ELEMENT VNMRestoreIPSettings (#PCDATA)>
+<!ELEMENT TransTCPIPEx (#PCDATA)>
+<!ELEMENT TransSerialEx (#PCDATA)>
+<!ELEMENT TransUSBEx (#PCDATA)>
+<!ELEMENT TransVNMEx (#PCDATA)>
 <!ELEMENT VNMSystemID (#PCDATA)>
 <!ELEMENT VNMIPAddress (#PCDATA)>
 <!ELEMENT VNMMaskAddress (#PCDATA)>
-<!ELEMENT IsAuthenticationEnabled (#PCDATA)>
+<!ELEMENT VirtualNetLinxMasterFlag (#PCDATA)>
 <!ELEMENT UserName (#PCDATA)>
 <!ELEMENT Password (#PCDATA)>
 
@@ -78,11 +82,12 @@
 <!ELEMENT File ( Identifier,
                FilePathName,
                Comments?,
+               MasterDirectory?,
                DeviceMap*,
                IRDB*)>
 
 <!ATTLIST File 
-       Type (Source | MasterSrc | Include | Module | AXB | IR | TPD | TP4 | KPD | TKO | AMX_IR_DB | IRN_DB | Other | DUET | TOK | TKN | KPB ) "Other"
+       Type (Source | MasterSrc | Include | Module | AXB | IR | TPD | TP4 | TP5 | KPD | TKO | AMX_IR_DB | IRN_DB | Other | DUET | TOK | TKN | KPB | XDD ) "Other"
        CompileType (Axcess | Netlinx | None) "None"> 
 
 <!ELEMENT FilePathName	(#PCDATA)>
@@ -104,7 +109,7 @@
        <!ELEMENT Notes (#PCDATA)>
 ]>
 
-<Workspace CurrentVersion="3.3"><Identifier>import-test</Identifier>
+<Workspace CurrentVersion="4.0"><Identifier>import-test</Identifier>
 <CreateVersion>3.3</CreateVersion>
 <PJS_File></PJS_File>
 <PJS_ConvertDate></PJS_ConvertDate>
@@ -116,17 +121,18 @@
 <SalesOrder>Test Sales Order</SalesOrder>
 <PurchaseOrder>Test PO</PurchaseOrder>
 <Comments>Test project description.</Comments>
-<System IsActive="true" Platform="Netlinx" Transport="TCPIP"><Identifier>import-test-system</Identifier>
+<System IsActive="true" Platform="Netlinx" Transport="TCPIP" TransportEx="TCPIP"><Identifier>import-test-system</Identifier>
 <SysID>0</SysID>
-<TransSerial>COM1,38400,8,None,1,None</TransSerial>
-<TransModem>COM1,38400,8,None,1,None</TransModem>
 <TransTCPIP>192.168.1.2:1319:1:Development::</TransTCPIP>
-<VirtualNetLinxMasterFlag>0</VirtualNetLinxMasterFlag>
-<VNMRestoreIPSettings>0.0.0.0:1319:1</VNMRestoreIPSettings>
+<TransSerial>COM1,38400,8,None,1,None</TransSerial>
+<TransTCPIPEx>192.168.1.2|1319|1|Development||</TransTCPIPEx>
+<TransSerialEx>COM1|38400|8|None|1|None||</TransSerialEx>
+<TransUSBEx>|||||</TransUSBEx>
+<TransVNMEx>10.0.0.1|1|&lt;Default&gt;</TransVNMEx>
+<VirtualNetLinxMasterFlag>false</VirtualNetLinxMasterFlag>
 <VNMSystemID>1</VNMSystemID>
 <VNMIPAddress>10.0.0.1</VNMIPAddress>
 <VNMMaskAddress>255.255.255.0</VNMMaskAddress>
-<IsAuthenticationEnabled>0</IsAuthenticationEnabled>
 <UserName></UserName>
 <Password></Password>
 <Comments>Test system description.</Comments>
@@ -149,6 +155,14 @@
 <File CompileType="Netlinx" Type="Module"><Identifier>test-module-source</Identifier>
 <FilePathName>module-source\test-module-source.axs</FilePathName>
 <Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="TP4"><Identifier>tp_1</Identifier>
+<FilePathName>touch-panel\tp_1.TP4</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="Custom [10001:1:0]"><DevName>Custom [10001:1:0]</DevName>
+</DeviceMap>
+<DeviceMap DevAddr="Custom [10002:1:0]"><DevName>Custom [10002:1:0]</DevName>
+</DeviceMap>
 </File>
 </System>
 </Project>

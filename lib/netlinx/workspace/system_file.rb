@@ -8,6 +8,8 @@ module NetLinx
     attr_accessor :path
     attr_accessor :description
     attr_accessor :type
+    # Array of D:P:S strings that this file maps to.
+    attr_accessor :devices
     
     # @option kwargs [NetLinx::System] :system This file's parent system node.
     # @option kwargs [String] :name ('') Identifiable name.
@@ -22,8 +24,16 @@ module NetLinx
       @description = kwargs.fetch :description, ''
       @type        = kwargs.fetch :type,        :master
       
+      @devices = []
+      
       system_file_element = kwargs.fetch :element, nil
       parse_xml_element system_file_element if system_file_element
+    end
+    
+    # Add a device that uses this file.
+    # @param device [String] D:P:S string.
+    def << device
+      devices << device
     end
     
     # @return the SystemFile's name.
@@ -41,6 +51,14 @@ module NetLinx
         file.add_element('Identifier').tap { |e| e.text = name }
         file.add_element('FilePathName').tap { |e| e.text = path }
         file.add_element('Comments').tap { |e| e.text = description }
+        
+        @devices.each do |dps|
+          file.add_element('DeviceMap').tap do |e|
+            text = "Custom [#{dps}]"
+            e.attributes['DevAddr'] = text
+            e.add_element('DevName').text = text
+          end
+        end
       end
     end
     

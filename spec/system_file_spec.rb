@@ -3,38 +3,47 @@ require 'test/netlinx/compilable'
 
 describe NetLinx::SystemFile do
   
-  it "has a name" do
-    name = 'test-module-compiled'
-    subject.name = name
-    subject.name.should eq name
+  subject {
+    NetLinx::SystemFile.new \
+      system: system,
+      name: name,
+      type: type,
+      path: path,
+      description: description
+  }
+  
+  let(:type) { :tko }
+  let(:name) { 'tp_1' }
+  let(:path) { 'touch-panel/tp_1.TP4' }
+  let(:description) { 'this is a test file' }
+  let(:system) { double() }
+  
+  its(:name) { should eq name }
+  its(:type) { should eq type }
+  its(:path) { should eq path }
+  its(:description) { should eq description }
+  its(:system) { should eq system }
+  its(:to_s) { should eq name }
+  
+  shared_context "device map" do
+    let(:dps_1) { '10001:1:0' }
+    let(:dps_2) { '10002:1:0' }
+    
+    before {
+      subject << dps_1
+      subject << dps_2
+    }
   end
   
-  it "has a type" do
-    type = 'TKO'
-    subject.type = type
-    subject.type.should eq type
-  end
-  
-  it "has a path" do
-    path = 'module-compiled\test-module-compiled.tko'
-    subject.path = path
-    subject.path.should eq path
-  end
-  
-  it "has a description" do
-    description = 'this is a test file'
-    subject.description = description
-    subject.description.should eq description
-  end
-  
-  it "prints its name for to_s" do
-    name = 'system file name'
-    subject.name = name
-    subject.to_s.should eq name
-  end
-  
-  it "has a reference to its parent System object" do
-    subject.should respond_to :system
+  describe "device map" do
+    include_context "device map"
+    
+    its(:devices) { should be_an Array }
+    
+    it "includes DPS 1 and 2" do
+      subject.devices.should include dps_1
+      subject.devices.should include dps_2
+    end
   end
   
   describe "xml output" do
@@ -67,6 +76,16 @@ describe NetLinx::SystemFile do
       element.elements['FilePathName'].first.should eq path
       element.elements['Comments'].first.should eq description
       
+      element.elements['DeviceMap'].should eq nil
+    end
+    
+    describe "with device map" do
+      include_context "device map"
+      
+      specify do
+        element.elements['DeviceMap'].attributes['DevAddr'].should eq "Custom [#{dps_1}]"
+        element.elements['DeviceMap'].elements['DevName'].first.should eq "Custom [#{dps_1}]"
+      end
     end
   end
   
