@@ -20,7 +20,7 @@ module NetLinx
             config_file = 'workspace.config.yaml'
             
             if File.exists? config_file
-              puts "Aborted: workspace.config.yaml already exists."
+              puts "Aborted: #{config_file} already exists."
               next
             end
             

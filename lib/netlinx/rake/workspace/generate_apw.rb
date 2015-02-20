@@ -19,7 +19,14 @@ module NetLinx
           task(name) do
             require 'netlinx/workspace'
             
-            NetLinx::Workspace::YAML.parse_file('workspace.config.yaml').tap do |workspace|
+            workspace_file = 'workspace.config.yaml'
+            
+            unless File.exists? workspace_file
+              puts "File not found: #{workspace_file}"
+              next
+            end
+            
+            NetLinx::Workspace::YAML.parse_file(workspace_file).tap do |workspace|
               return unless workspace.name
               File.open("#{workspace.name.strip}.apw", 'w') do |f|
                 f.write workspace.to_xml

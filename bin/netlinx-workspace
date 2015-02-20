@@ -11,10 +11,17 @@ OptionParser.new do |opts|
     exit
   end
   
-  opts.on '-n', '--new [folder_name]', 'Create a new workspace.',
-    'Uses working dir if folder is', 'not specified.' do |folder|
-      # TODO: Implement
-      raise NotImplementedError
+  opts.on '-g', '--generate', 'Generate .apw workspace file',
+    'from yaml config.' do
+      require 'netlinx/rake/workspace/generate_apw'
+      NetLinx::Rake::Workspace::GenerateAPW.new
+      Rake.application['generate_apw'].invoke
+  end
+  
+  opts.on '--create', 'Create a workspace config.yaml file.' do
+    require 'netlinx/rake/workspace/create_workspace_config'
+    NetLinx::Rake::Workspace::CreateWorkspaceConfig.new
+    Rake.application['create_workspace_config'].invoke
   end
   
 end.parse! args
