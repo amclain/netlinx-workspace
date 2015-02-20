@@ -107,6 +107,25 @@ describe NetLinx::Workspace::YAML do
           system.description.should eq ''
           system.ip_address.should eq '192.168.1.2'
           system.ip_port.should eq 1319
+          
+          Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+            file_list.should include 'Production.axs'
+            file_list['Production.axs'].type.should eq :master
+            file_list['Production.axs'].name.should eq system.name
+            
+            file_list.should include 'include/audio.axi'
+            file_list['include/audio.axi'].type.should eq :include
+            file_list['include/audio.axi'].name.should eq 'audio'
+            
+            file_list.should include 'include/projector.axi'
+            file_list['include/projector.axi'].type.should eq :include
+            
+            file_list.should include 'touch_panel/Production.TP4'
+            file_list['touch_panel/Production.TP4'].tap do |file|
+              file.type.should eq :tp4
+              file.devices.should eq ['10001:1:0']
+            end
+          end
         end
         
         project.systems[1].tap do |system|
@@ -115,6 +134,16 @@ describe NetLinx::Workspace::YAML do
           system.description.should eq 'For testing code.'
           system.ip_address.should eq '192.168.253.2'
           system.ip_port.should eq 5000
+          
+          Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+            file_list.should include 'test_suite/Test Suite.axs'
+            file_list['test_suite/Test Suite.axs'].type.should eq :master
+            file_list['test_suite/Test Suite.axs'].name.should eq system.name
+            
+            file_list.should include 'test_suite/include/test_harness.axi'
+            file_list['test_suite/include/test_harness.axi'].type.should eq :include
+            file_list['test_suite/include/test_harness.axi'].name.should eq 'test_harness'
+          end
         end
         
         project.systems[2].tap do |system|
@@ -126,6 +155,12 @@ describe NetLinx::Workspace::YAML do
           system.data_bits.should eq 8
           system.parity.should eq :none
           system.stop_bits.should eq 1
+          
+          Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+            file_list.should include 'serial_connection_1/Overridden File Name.axs'
+            file_list['serial_connection_1/Overridden File Name.axs'].type.should eq :master
+            file_list['serial_connection_1/Overridden File Name.axs'].name.should eq 'Overridden File Name'
+          end
         end
         
         project.systems[3].tap do |system|
@@ -137,6 +172,24 @@ describe NetLinx::Workspace::YAML do
           system.data_bits.should eq 8
           system.parity.should eq :none
           system.stop_bits.should eq 1
+          
+          Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+            file_list.should include 'serial_connection_2/Serial Connection 2.axs'
+            file_list['serial_connection_2/Serial Connection 2.axs'].type.should eq :master
+            file_list['serial_connection_2/Serial Connection 2.axs'].name.should eq system.name
+            
+            file_list.should include 'serial_connection_2/touch_panel/Serial Connection 2.TP4'
+            file_list['serial_connection_2/touch_panel/Serial Connection 2.TP4'].tap do |file|
+              file.type.should eq :tp4
+              file.devices.should eq ['10004:1:0']
+            end
+            
+            file_list.should include 'serial_connection_2/ir/Serial Connection 2.irl'
+            file_list['serial_connection_2/ir/Serial Connection 2.irl'].tap do |file|
+              file.type.should eq :ir
+              file.devices.should eq ['5004:1:0']
+            end
+          end
         end
         
         project.systems[4].tap do |system|
@@ -148,11 +201,14 @@ describe NetLinx::Workspace::YAML do
           system.data_bits.should eq 7
           system.parity.should eq :even
           system.stop_bits.should eq 2
+          
+          Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+            file_list.should include 'serial_connection_3/Serial Connection 3.axs'
+            file_list['serial_connection_3/Serial Connection 3.axs'].type.should eq :master
+            file_list['serial_connection_3/Serial Connection 3.axs'].name.should eq system.name
+          end
         end
       end
-      
-      specify "test included files"
-      specify "device mapping"
     end
     
     describe "workspace" do

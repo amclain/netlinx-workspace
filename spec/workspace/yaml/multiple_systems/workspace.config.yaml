@@ -1,10 +1,16 @@
 systems:
   -
     name: Production
-    active: true # First system defaults to active if not specified.
     connection: 192.168.1.2
+    touch_panels:
+      - path: Production.TP4
+        dps:  '10001:1:0'
   -
     name: Test Suite
+    active: true # First system defaults to active if not specified.
+    root: test_suite
+    # includes:
+    #   - ../include/**/*.axi
     id: 2
     description: For testing code.
     connection:
@@ -12,12 +18,22 @@ systems:
       port: 5000
   -
     name: Serial Connection 1
+    root: serial_connection_1
+    axs:  Overridden File Name.axs
     connection: COM5
   -
     name: Serial Connection 2
+    root: serial_connection_2
     connection: COM2:57600
+    touch_panels:
+      - path: Serial Connection 2.TP4
+        dps:  '10004:1:0'
+    ir:
+      - path: Serial Connection 2.irl
+        dps:  '5004:1:0'
   -
     name: Serial Connection 3
+    root: serial_connection_3
     connection:
       port: com3
       baud_rate: 115200

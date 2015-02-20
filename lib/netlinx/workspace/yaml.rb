@@ -24,21 +24,26 @@ module NetLinx
               system.id = yaml_system['id'] if yaml_system['id']
               system.description = yaml_system['description'] if yaml_system['description']
               
+              root = yaml_system['root'] # File system root directory.
+              
               parse_connection_node system, yaml_system['connection']
               
               # Auto-include master source file.
-              master_src_path = "#{system.name}.axs"
+              master_src_path = yaml_system['axs'] || "#{system.name}.axs"
+              master_src_path = "#{root}/#{master_src_path}" if root
               warn_if_file_does_not_exist master_src_path
               system << NetLinx::SystemFile.new(
                 path: master_src_path,
-                name: system.name,
+                name: to_file_name(master_src_path),
                 type: :master
               )
               
               yaml_excluded_files = yaml_system['excluded_files']
               
               # Auto-include 'include' directory.
-              include_files = Dir['include/**/*.axi']
+              include_path = 'include/**/*.axi'
+              include_path = "#{root}/#{include_path}" if root
+              include_files = Dir[include_path]
               include_files -= yaml_excluded_files if yaml_excluded_files
               include_files.each do |file_path|
                 system << NetLinx::SystemFile.new(
@@ -68,6 +73,7 @@ module NetLinx
               if yaml_touch_panels
                 yaml_touch_panels.each do |yaml_touch_panel|
                   file_path = "touch_panel/#{yaml_touch_panel['path']}"
+                  file_path = "#{root}/#{file_path}" if root
                   warn_if_file_does_not_exist file_path
                   
                   system << NetLinx::SystemFile.new(
@@ -84,6 +90,7 @@ module NetLinx
               if yaml_ir_files
                 yaml_ir_files.each do |yaml_ir|
                   file_path = "ir/#{yaml_ir['path']}"
+                  file_path = "#{root}/#{file_path}" if root
                   warn_if_file_does_not_exist file_path
                   
                   system << NetLinx::SystemFile.new(
