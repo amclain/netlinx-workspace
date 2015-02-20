@@ -8,7 +8,7 @@ describe NetLinx::Workspace::YAML do
   it { should respond_to :parse_file }
   
   describe "parse" do
-    subject { NetLinx::Workspace::YAML.parse_file "#{file}.config.yaml" }
+    subject { NetLinx::Workspace::YAML.parse_file 'workspace.config.yaml' }
     
     let(:workspace) { subject }
     
