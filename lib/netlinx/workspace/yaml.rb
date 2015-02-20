@@ -26,38 +26,72 @@ module NetLinx
               
               parse_connection_node system, yaml_system['connection']
               
+              # Auto-include master source file.
               system << NetLinx::SystemFile.new(
                 path: "#{system.name}.axs",
                 name: system.name,
                 type: :master
               )
               
-              yaml_files = yaml_system['files']
+              yaml_excluded_files = yaml_system['excluded_files']
+              
+              # Auto-include 'include' directory.
+              include_files = Dir['include/**/*.axi']
+              include_files -= yaml_excluded_files if yaml_excluded_files
+              include_files.each do |file_path|
+                system << NetLinx::SystemFile.new(
+                  path: file_path,
+                  name: to_file_name(file_path),
+                  type: :include
+                )
+              end
+              
+              # Additional include paths.
+              yaml_files = yaml_system['includes']
               if yaml_files
                 files = Dir[*yaml_files]
-                
-                yaml_excluded_files = yaml_system['excluded_files']
-                files = files - Dir[*yaml_excluded_files] if yaml_excluded_files
+                files -= Dir[*yaml_excluded_files] if yaml_excluded_files
                 
                 files.each do |file_path|
-                  system << NetLinx::SystemFile.new.tap do |file|
-                    file.path = file_path
-                    file.name = File.basename(file_path).gsub /\.\w+\z/, ''
-                    
-                    file.type = {
-                      :axs => :source,
-                      :axi => :include,
-                      :jar => :duet,
-                      :tko => :tko,
-                      :irl => :ir,
-                      :tp4 => :tp4,
-                      :tp5 => :tp5,
-                    }[File.extname(file_path)[1..-1].downcase.to_sym]
-                    
-                    # TODO: Detect axs/tko modules.
-                  end
+                  system << NetLinx::SystemFile.new(
+                    path: file_path,
+                    name: to_file_name(file_path),
+                    type: :include
+                  )
                 end
               end
+              
+              # Touch panel files.
+              yaml_touch_panels = yaml_system['touch_panels']
+              if yaml_touch_panels
+                yaml_touch_panels.each do |yaml_touch_panel|
+                  file_path = yaml_touch_panel['path']
+                  
+                  system << NetLinx::SystemFile.new(
+                    path: "touch_panel/#{file_path}",
+                    name: to_file_name(file_path),
+                    type: File.extname(file_path)[1..-1].downcase.to_sym
+                  )
+                    .tap { |file| attach_devices file, yaml_touch_panel }
+                end
+              end
+              
+              # IR files.
+              yaml_ir_files = yaml_system['ir']
+              if yaml_ir_files
+                yaml_ir_files.each do |yaml_ir|
+                  file_path = yaml_ir['path']
+                  
+                  system << NetLinx::SystemFile.new(
+                    path: "ir/#{file_path}",
+                    name: to_file_name(file_path),
+                    type: :ir
+                  )
+                    .tap { |file| attach_devices file, yaml_ir }
+                end
+              end
+              
+              # TODO: Modules.
             end
           end
         else
@@ -73,6 +107,22 @@ module NetLinx
       end
       
       private
+      
+      # @return [String] File name without the path or extension.
+      def self.to_file_name path
+        File.basename(path).gsub(/\.\w+\z/, '')
+      end
+      
+      def self.attach_devices system_file, yaml_node
+        devices = yaml_node['dps']
+        
+        case devices
+        when String
+          system_file.devices = [devices]
+        when Array
+          system_file.devices = devices
+        end
+      end
       
       def self.parse_connection_node system, connection_node
         case connection_node

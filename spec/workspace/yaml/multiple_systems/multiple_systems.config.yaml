@@ -3,7 +3,6 @@ systems:
     name: Production
     active: true # First system defaults to active if not specified.
     connection: 192.168.1.2
-    files: include/**/*.axi
   -
     name: Test Suite
     id: 2
@@ -11,7 +10,6 @@ systems:
     connection:
       host: 192.168.253.2
       port: 5000
-    files: test/include/**/*.axi
   -
     name: Serial Connection 1
     connection: COM5

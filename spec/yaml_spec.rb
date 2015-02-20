@@ -49,20 +49,37 @@ describe NetLinx::Workspace::YAML do
           file_list.should include 'include/audio.axi'
           file_list['include/audio.axi'].type.should eq :include
           file_list['include/audio.axi'].name.should eq 'audio'
+          
           file_list.should include 'include/projector.axi'
           file_list['include/projector.axi'].type.should eq :include
+          
           file_list.should include 'ir/Comcast,Comcast,xfinity,Unknown,1.irl'
-          file_list['ir/Comcast,Comcast,xfinity,Unknown,1.irl'].type.should eq :ir
+          file_list['ir/Comcast,Comcast,xfinity,Unknown,1.irl'].tap do |file|
+            file.type.should eq :ir
+            file.devices.should eq ['5001:1:0']
+          end
+          
           file_list.should include 'ir/LG,LG,Unknown,Unknown,1.irl'
-          file_list['ir/LG,LG,Unknown,Unknown,1.irl'].type.should eq :ir
+          file_list['ir/LG,LG,Unknown,Unknown,1.irl'].tap do |file|
+            file.type.should eq :ir
+            file.devices.should eq ['5001:2:0', '5001:3:0']
+          end
+          
           file_list.should include 'touch_panel/Admin iPad.TP4'
-          file_list['touch_panel/Admin iPad.TP4'].type.should eq :tp4
+          file_list['touch_panel/Admin iPad.TP4'].tap do |file|
+            file.type.should eq :tp4
+            file.devices.should eq ['10001:1:0']
+          end
+          
           file_list.should include 'touch_panel/Conference Room Table.TP5'
-          file_list['touch_panel/Conference Room Table.TP5'].type.should eq :tp5
+          file_list['touch_panel/Conference Room Table.TP5'].tap do |file|
+            file.type.should eq :tp5
+            file.devices.should eq ['10002:1:0', '10003:1:0']
+          end
           
           file_list.should include 'include2/matrix.axi'
-          file_list['include/audio.axi'].type.should eq :include
-          file_list['include/audio.axi'].name.should eq 'matrix'
+          file_list['include2/matrix.axi'].type.should eq :include
+          file_list['include2/matrix.axi'].name.should eq 'matrix'
           
           file_list.should_not include 'MyClient Conference Room.tko'
           file_list.should_not include 'MyClient Conference Room.tkn'
@@ -72,8 +89,6 @@ describe NetLinx::Workspace::YAML do
           file_list.should_not include 'include/excluded_file.axi'
         end
       end
-      
-      specify "device mapping"
     end
     
     describe "multiple systems" do
