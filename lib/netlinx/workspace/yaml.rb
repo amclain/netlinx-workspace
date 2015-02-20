@@ -27,8 +27,10 @@ module NetLinx
               parse_connection_node system, yaml_system['connection']
               
               # Auto-include master source file.
+              master_src_path = "#{system.name}.axs"
+              warn_if_file_does_not_exist master_src_path
               system << NetLinx::SystemFile.new(
-                path: "#{system.name}.axs",
+                path: master_src_path,
                 name: system.name,
                 type: :master
               )
@@ -65,10 +67,11 @@ module NetLinx
               yaml_touch_panels = yaml_system['touch_panels']
               if yaml_touch_panels
                 yaml_touch_panels.each do |yaml_touch_panel|
-                  file_path = yaml_touch_panel['path']
+                  file_path = "touch_panel/#{yaml_touch_panel['path']}"
+                  warn_if_file_does_not_exist file_path
                   
                   system << NetLinx::SystemFile.new(
-                    path: "touch_panel/#{file_path}",
+                    path: file_path,
                     name: to_file_name(file_path),
                     type: File.extname(file_path)[1..-1].downcase.to_sym
                   )
@@ -80,10 +83,11 @@ module NetLinx
               yaml_ir_files = yaml_system['ir']
               if yaml_ir_files
                 yaml_ir_files.each do |yaml_ir|
-                  file_path = yaml_ir['path']
+                  file_path = "ir/#{yaml_ir['path']}"
+                  warn_if_file_does_not_exist file_path
                   
                   system << NetLinx::SystemFile.new(
-                    path: "ir/#{file_path}",
+                    path: file_path,
                     name: to_file_name(file_path),
                     type: :ir
                   )
@@ -107,6 +111,11 @@ module NetLinx
       end
       
       private
+      
+      def self.warn_if_file_does_not_exist file
+        puts "WARNING: Nonexistent file #{file}" unless File.exists? file
+        file
+      end
       
       # @return [String] File name without the path or extension.
       def self.to_file_name path

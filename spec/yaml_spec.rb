@@ -20,8 +20,6 @@ describe NetLinx::Workspace::YAML do
       project.systems.first
     end
     
-    before { workspace.should be_a NetLinx::Workspace }
-    
     around { |test| Dir.chdir("spec/workspace/yaml/#{file}") { test.run } }
     
     describe "single system" do
@@ -162,6 +160,18 @@ describe NetLinx::Workspace::YAML do
       specify
       specify "test included files"
       specify "device mapping"
+    end
+    
+    describe "warn on nonexistent file" do
+      let(:file) { 'warn_on_nonexistent_file' }
+      let(:name) { 'Warn On Nonexistent File' }
+      
+      specify do
+        $stdout.should_receive(:puts).exactly(3).times { |str|
+          str.should start_with "WARNING: "
+        }
+        workspace.name.should eq name
+      end
     end
   end
   

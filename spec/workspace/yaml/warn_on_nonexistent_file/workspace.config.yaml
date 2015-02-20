@@ -1,0 +1,22 @@
+# Missing files:
+#   - Warn On Nonexistent File.axs
+#   - touch-panel-does-not-exist.TP5
+#   - ir-file-does-not-exist.irl
+systems:
+  -
+    name: Warn On Nonexistent File
+    connection: 192.168.1.2
+    touch_panels: # Look in 'touch_panel' folder
+      -
+        path: Admin iPad.TP4
+        dps: '10001:1:0'
+      - 
+        path: touch-panel-does-not-exist.TP5
+        dps: '10002:1:0'
+    ir: # Look in 'ir' folder
+      -
+        path: Comcast,Comcast,xfinity,Unknown,1.irl
+        dps: '5001:1:0'
+      -
+        path: ir-file-does-not-exist.irl
+        dps: '5001:2:0'
