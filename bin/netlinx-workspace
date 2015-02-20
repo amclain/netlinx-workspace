@@ -1,1 +1,26 @@
 #! /usr/bin/env ruby
+require 'optparse'
+
+args = ARGV.empty? ? ['-h'] : ARGV
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: netlinx-workspace [options]"
+  
+  opts.on '-h', '--help', 'Display this help screen.' do
+    puts opts
+    exit
+  end
+  
+  opts.on '-g', '--generate', 'Generate .apw workspace file',
+    'from yaml config.' do
+      # TODO: Implement
+      raise NotImplementedError
+  end
+  
+  opts.on '-n', '--new [folder_name]', 'Create a new workspace.',
+    'Uses working dir if folder is', 'not specified.' do |folder|
+      # TODO: Implement
+      raise NotImplementedError
+  end
+  
+end.parse! args
