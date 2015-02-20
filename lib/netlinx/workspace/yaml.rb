@@ -31,12 +31,7 @@ module NetLinx
               # Auto-include master source file.
               master_src_path = yaml_system['axs'] || "#{system.name}.axs"
               master_src_path = "#{root}/#{master_src_path}" if root
-              warn_if_file_does_not_exist master_src_path
-              system << NetLinx::SystemFile.new(
-                path: master_src_path,
-                name: to_file_name(master_src_path),
-                type: :master
-              )
+              add_file_to_system system, yaml_system, master_src_path, :master
               
               yaml_excluded_files = yaml_system['excluded_files']
               
@@ -46,11 +41,7 @@ module NetLinx
               include_files = Dir[include_path]
               include_files -= yaml_excluded_files if yaml_excluded_files
               include_files.each do |file_path|
-                system << NetLinx::SystemFile.new(
-                  path: file_path,
-                  name: to_file_name(file_path),
-                  type: :include
-                )
+                add_file_to_system system, yaml_system, file_path, :include
               end
               
               # Additional include paths.
@@ -60,11 +51,7 @@ module NetLinx
                 files -= Dir[*yaml_excluded_files] if yaml_excluded_files
                 
                 files.each do |file_path|
-                  system << NetLinx::SystemFile.new(
-                    path: file_path,
-                    name: to_file_name(file_path),
-                    type: :include
-                  )
+                  add_file_to_system system, yaml_system, file_path, :include
                 end
               end
               
@@ -74,13 +61,7 @@ module NetLinx
                 yaml_touch_panels.each do |yaml_touch_panel|
                   file_path = "touch_panel/#{yaml_touch_panel['path']}"
                   file_path = "#{root}/#{file_path}" if root
-                  warn_if_file_does_not_exist file_path
-                  
-                  system << NetLinx::SystemFile.new(
-                    path: file_path,
-                    name: to_file_name(file_path),
-                    type: File.extname(file_path)[1..-1].downcase.to_sym
-                  )
+                  add_file_to_system(system, yaml_touch_panel, file_path, File.extname(file_path)[1..-1].downcase.to_sym)
                     .tap { |file| attach_devices file, yaml_touch_panel }
                 end
               end
@@ -91,13 +72,7 @@ module NetLinx
                 yaml_ir_files.each do |yaml_ir|
                   file_path = "ir/#{yaml_ir['path']}"
                   file_path = "#{root}/#{file_path}" if root
-                  warn_if_file_does_not_exist file_path
-                  
-                  system << NetLinx::SystemFile.new(
-                    path: file_path,
-                    name: to_file_name(file_path),
-                    type: :ir
-                  )
+                  add_file_to_system(system, yaml_system, file_path, :ir)
                     .tap { |file| attach_devices file, yaml_ir }
                 end
               end
@@ -119,14 +94,19 @@ module NetLinx
       
       private
       
-      def self.warn_if_file_does_not_exist file
-        puts "WARNING: Nonexistent file #{file}" unless File.exists? file
-        file
-      end
-      
       # @return [String] File name without the path or extension.
       def self.to_file_name path
         File.basename(path).gsub(/\.\w+\z/, '')
+      end
+      
+      def self.add_file_to_system system, yaml_system_node, file_path, type
+        puts "WARNING: Nonexistent file #{file_path}" unless File.exists? file_path
+        
+        NetLinx::SystemFile.new(
+          path: file_path,
+          name: to_file_name(file_path),
+          type: type
+        ).tap { |system_file| system << system_file }
       end
       
       def self.attach_devices system_file, yaml_node
