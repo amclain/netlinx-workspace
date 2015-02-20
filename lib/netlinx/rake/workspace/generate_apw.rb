@@ -17,8 +17,14 @@ module NetLinx
           desc "Generate .apw workspace file from yaml config."
           
           task(name) do
-            # TODO: Implement.
-            raise NotImplementedError
+            require 'netlinx/workspace'
+            
+            NetLinx::Workspace::YAML.parse_file('workspace.config.yaml').tap do |workspace|
+              return unless workspace.name
+              File.open("#{workspace.name.strip}.apw", 'w') do |f|
+                f.write workspace.to_xml
+              end
+            end
           end
         end
         
