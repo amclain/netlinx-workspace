@@ -64,7 +64,7 @@ module NetLinx
     
     private
     
-    # @reutrn lookup table for symbol to XML NetLinx file types.
+    # @return lookup table for symbol to XML NetLinx file types.
     def type_lookup
       {
         master:  'MasterSrc',

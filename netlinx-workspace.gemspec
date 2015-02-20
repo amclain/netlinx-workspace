@@ -12,13 +12,17 @@ Gem::Specification.new do |s|
   s.license   = 'Apache 2.0'
   
   s.files     =
-    ['license.txt', 'README.md'] +
-    Dir['bin/**/*'] +
-    Dir['lib/**/*'] +
-    Dir['doc/**/*']
+    [
+      'license.txt',
+      'README.md',
+    ] +
+    Dir[
+      'bin/**/*',
+      'lib/**/*',
+      'doc/**/*',
+    ]
   
-  s.executables = [
-  ]
+  s.executables = ['netlinx-workspace']
   
   s.add_development_dependency 'netlinx-compile', '~> 3.0'
   
