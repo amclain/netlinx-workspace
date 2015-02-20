@@ -17,8 +17,29 @@ module NetLinx
           desc "Create a workspace config.yaml file."
           
           task(name) do
-            # TODO: Implement.
-            raise NotImplementedError
+            config_file = 'workspace.config.yaml'
+            
+            if File.exists? config_file
+              puts "Aborted: workspace.config.yaml already exists."
+              next
+            end
+            
+            File.open config_file, 'w' do |f|
+              f.write <<EOS
+systems:
+  -
+    name: Client - Room
+    connection: 192.168.1.2
+    touch_panels:
+      -
+        path: Touch Panel.TP4
+        dps: '10001:1:0'
+    ir:
+      -
+        path: IR.irl
+        dps: '5001:1:0'
+EOS
+            end
           end
         end
         

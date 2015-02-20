@@ -11,12 +11,6 @@ OptionParser.new do |opts|
     exit
   end
   
-  opts.on '-g', '--generate', 'Generate .apw workspace file',
-    'from yaml config.' do
-      # TODO: Implement
-      raise NotImplementedError
-  end
-  
   opts.on '-n', '--new [folder_name]', 'Create a new workspace.',
     'Uses working dir if folder is', 'not specified.' do |folder|
       # TODO: Implement
