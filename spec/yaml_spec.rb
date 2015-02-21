@@ -160,6 +160,9 @@ describe NetLinx::Workspace::YAML do
             file_list.should include 'serial_connection_1/Overridden File Name.axs'
             file_list['serial_connection_1/Overridden File Name.axs'].type.should eq :master
             file_list['serial_connection_1/Overridden File Name.axs'].name.should eq 'Overridden File Name'
+            
+            file_list.should_not include 'include/audio.axi'
+            file_list.should_not include 'include/projector.axi'
           end
         end
         
@@ -189,6 +192,9 @@ describe NetLinx::Workspace::YAML do
               file.type.should eq :ir
               file.devices.should eq ['5004:1:0']
             end
+            
+            file_list.should_not include 'include/audio.axi'
+            file_list.should_not include 'include/projector.axi'
           end
         end
         
@@ -206,6 +212,9 @@ describe NetLinx::Workspace::YAML do
             file_list.should include 'serial_connection_3/Serial Connection 3.axs'
             file_list['serial_connection_3/Serial Connection 3.axs'].type.should eq :master
             file_list['serial_connection_3/Serial Connection 3.axs'].name.should eq system.name
+            
+            file_list.should_not include 'include/audio.axi'
+            file_list.should_not include 'include/projector.axi'
           end
         end
       end
