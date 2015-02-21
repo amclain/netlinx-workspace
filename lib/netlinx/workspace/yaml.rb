@@ -21,6 +21,7 @@ module NetLinx
           yaml_systems.each do |yaml_system|
             project << NetLinx::System.new.tap do |system|
               system.name = yaml_system['name'] if yaml_system['name']
+              system.active = yaml_system['active'] || false
               system.id = yaml_system['id'] if yaml_system['id']
               system.description = yaml_system['description'] if yaml_system['description']
               
@@ -83,6 +84,22 @@ module NetLinx
         else
           # An explicit workspace is defined.
         end
+        
+        # Ensure exactly one system in the workspace is set active.
+        a_system_is_active = false
+        workspace.projects.each do |project|
+          project.systems.each do |system|
+            if a_system_is_active
+              system.active = false
+              next
+            else
+              a_system_is_active = true if system.active
+            end
+          end
+        end
+        
+        # No active systems. Set the first one active automatically.
+        workspace.projects.first.systems.first.active = true unless a_system_is_active
         
         workspace
       end

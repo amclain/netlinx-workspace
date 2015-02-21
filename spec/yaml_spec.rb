@@ -87,6 +87,10 @@ describe NetLinx::Workspace::YAML do
           file_list.should_not include 'include/excluded_file.axi'
         end
       end
+      
+      it "should automatically be active if it's the only system in the workspace" do
+        system.active.should eq true
+      end
     end
     
     describe "multiple systems" do
@@ -103,6 +107,7 @@ describe NetLinx::Workspace::YAML do
         
         project.systems[0].tap do |system|
           system.name.should eq name
+          system.active.should eq false
           system.id.should eq 0
           system.description.should eq ''
           system.ip_address.should eq '192.168.1.2'
@@ -130,6 +135,7 @@ describe NetLinx::Workspace::YAML do
         
         project.systems[1].tap do |system|
           system.name.should eq 'Test Suite'
+          system.active.should eq true
           system.id.should eq 2
           system.description.should eq 'For testing code.'
           system.ip_address.should eq '192.168.253.2'
@@ -148,6 +154,7 @@ describe NetLinx::Workspace::YAML do
         
         project.systems[2].tap do |system|
           system.name.should eq 'Serial Connection 1'
+          system.active.should eq false
           system.id.should eq 0
           system.description.should eq ''
           system.com_port.should eq :com5
@@ -168,6 +175,7 @@ describe NetLinx::Workspace::YAML do
         
         project.systems[3].tap do |system|
           system.name.should eq 'Serial Connection 2'
+          system.active.should eq false
           system.id.should eq 0
           system.description.should eq ''
           system.com_port.should eq :com2
@@ -200,6 +208,7 @@ describe NetLinx::Workspace::YAML do
         
         project.systems[4].tap do |system|
           system.name.should eq 'Serial Connection 3'
+          system.active.should eq false
           system.id.should eq 0
           system.description.should eq ''
           system.com_port.should eq :com3
