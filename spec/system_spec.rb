@@ -235,6 +235,15 @@ describe NetLinx::System do
       
       element.elements['File/Identifier'].first.should eq file_name
     end
+    
+    it "sets transport to TCPIP if IP address is specified" do
+      element.attributes['TransportEx'].should eq 'TCPIP'
+    end
+    
+    it "sets transport to serial if IP address is 0.0.0.0" do
+      subject.ip_address = '0.0.0.0'
+      element.attributes['TransportEx'].should eq 'Serial'
+    end
   end
   
 end

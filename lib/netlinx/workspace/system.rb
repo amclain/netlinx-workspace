@@ -89,7 +89,8 @@ module NetLinx
         system.attributes['IsActive']  = false
         system.attributes['Platform']  = 'Netlinx'
         system.attributes['Transport'] = 'Serial'
-        system.attributes['TransportEx'] = 'TCPIP'
+        system.attributes['TransportEx'] =
+          (ip_address == '0.0.0.0') ? 'Serial' : 'TCPIP'
         
         system.add_element('Identifier').tap { |e| e.text = name }
         system.add_element('SysID').tap { |e| e.text = id }
