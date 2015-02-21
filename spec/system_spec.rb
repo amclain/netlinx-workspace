@@ -10,18 +10,20 @@ describe NetLinx::System do
       project: project,
       id: id,
       name: name,
+      active: active,
       description: description,
       ip_address: ip_address,
       com_port: com_port,
       baud_rate: baud_rate
   }
   
-  let(:name) { 'Test System' }
-  let(:id) { 2 }
+  let(:name)        { 'Test System' }
+  let(:id)          { 2 }
+  let(:active)      { false }
   let(:description) { 'Test description.' }
-  let(:ip_address) { '192.168.1.2' }
-  let(:com_port) { :com2 }
-  let(:baud_rate) { 57600 }
+  let(:ip_address)  { '192.168.1.2' }
+  let(:com_port)    { :com2 }
+  let(:baud_rate)   { 57600 }
   
   let(:workspace) { OpenStruct.new path: File.expand_path('spec/workspace/import-test') }
   let(:project)   { OpenStruct.new workspace: workspace }
@@ -65,6 +67,14 @@ describe NetLinx::System do
       path: 'duet-module/duet-lib-pjlink_dr0_1_1.jar',
       system: subject
   }
+  
+  describe "stores project data" do
+    its(:name) { should eq name }
+    its(:id) { should eq id }
+    its(:active) { should eq active }
+    its(:description) { should eq description }
+    its(:files) { should eq [] }
+  end
   
   describe "is compilable" do
     describe "interface" do
@@ -122,13 +132,6 @@ describe NetLinx::System do
     it "returns an empty library path" do
       subject.compiler_library_paths.count.should eq 0
     end
-  end
-  
-  describe "stores project data" do
-    its(:name) { should eq name }
-    its(:id) { should eq id }
-    its(:description) { should eq description }
-    its(:files) { should eq [] }
   end
   
   it "outputs its name for to_s" do
@@ -226,6 +229,9 @@ describe NetLinx::System do
       
       element.name.should eq 'System'
       
+      element.attributes['IsActive'].should eq 'false'
+      element.attributes['Platform'].should eq 'Netlinx'
+      
       element.elements['Identifier'].first.should eq name
       element.elements['SysID'].first.should eq id
       element.elements['Comments'].first.should eq description
@@ -236,13 +242,27 @@ describe NetLinx::System do
       element.elements['File/Identifier'].first.should eq file_name
     end
     
-    it "sets transport to TCPIP if IP address is specified" do
-      element.attributes['TransportEx'].should eq 'TCPIP'
+    describe "TransportEx" do
+      it "is TCPIP if IP address is specified" do
+        element.attributes['TransportEx'].should eq 'TCPIP'
+      end
+      
+      it "is Serial if IP address is 0.0.0.0" do
+        subject.ip_address = '0.0.0.0'
+        element.attributes['TransportEx'].should eq 'Serial'
+      end
     end
     
-    it "sets transport to serial if IP address is 0.0.0.0" do
-      subject.ip_address = '0.0.0.0'
-      element.attributes['TransportEx'].should eq 'Serial'
+    describe "IsActive" do
+      describe "is false" do
+        let(:active) { false }
+        specify { element.attributes['IsActive'].should eq active.to_s }
+      end
+      
+      describe "is true" do
+        let(:active) { true }
+        specify { element.attributes['IsActive'].should eq active.to_s }
+      end
     end
   end
   

@@ -10,6 +10,7 @@ module NetLinx
     attr_accessor :files
     
     attr_accessor :name
+    attr_accessor :active
     attr_accessor :id
     attr_accessor :description
     
@@ -27,6 +28,8 @@ module NetLinx
     # @option kwargs [NetLinx::Project] :project This system's parent project node.
     # @option kwargs [String] :name ('') System name.
     # @option kwargs [String] :description ('')
+    # @option kwargs [Boolean] :active (false) True if this is the active system
+    #   in the workspace.
     # @option kwargs [Integer] :id (0) Master controller system ID.
     #   0 connects to any master at the given communication settings.
     #   Or in other words, 0 prevents disconnection from a master
@@ -48,6 +51,7 @@ module NetLinx
       
       @name        = kwargs.fetch :name,        ''
       @id          = kwargs.fetch :id,          0
+      @active      = kwargs.fetch :active,      false
       @description = kwargs.fetch :description, ''
       
       @ip_address  = kwargs.fetch :ip_address, '0.0.0.0'
@@ -86,7 +90,7 @@ module NetLinx
     # @return [REXML::Element] an XML element representing this system.
     def to_xml_element
       REXML::Element.new('System').tap do |system|
-        system.attributes['IsActive']  = false
+        system.attributes['IsActive']  = active
         system.attributes['Platform']  = 'Netlinx'
         system.attributes['Transport'] = 'Serial'
         system.attributes['TransportEx'] =
@@ -185,6 +189,7 @@ module NetLinx
     def parse_xml_element system
       # Load system params.
       @name        = system.elements['Identifier'].text.strip || ''
+      @active      = (system.attributes['IsActive'].strip == 'true') ? true : false
       @id          = system.elements['SysID'].text.strip.to_i || 0
       @description = system.elements['Comments'].text || ''
       

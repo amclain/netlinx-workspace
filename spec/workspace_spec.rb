@@ -205,6 +205,7 @@ describe NetLinx::Workspace do
       let(:system) {
         NetLinx::System.new \
           name: 'Test System',
+          active: true,
           id: 3,
           description: 'Test System',
           ip_address: '192.168.253.2',
@@ -248,6 +249,7 @@ describe NetLinx::Workspace do
         new_system = new_project.systems.first
         
         new_system.name.should                eq system.name
+        new_system.active.should                eq system.active
         new_system.id.should                  eq system.id
         new_system.description.should         eq system.description
         new_system.ip_address.should          eq system.ip_address
