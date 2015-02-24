@@ -1,6 +1,4 @@
-# NetLinx Workspace
-
-netlinx-workspace
+# netlinx-workspace
 
 A library for working with AMX NetLinx Studio workspaces in Ruby.
 
@@ -9,7 +7,7 @@ A library for working with AMX NetLinx Studio workspaces in Ruby.
 [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-yellowgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 This library provides a developer API for working with NetLinx Studio workspaces
-in Ruby. It also adds compiler support to the [NetLinx Compile](https://sourceforge.net/p/netlinx-compile/wiki/Home/)
+in Ruby. It also adds compiler support to the [netlinx-compile](https://github.com/amclain/netlinx-compile)
 gem for these workspaces.
 
 **APW Target Version**
@@ -50,35 +48,35 @@ netlinx-workspace is available as a Ruby gem.
 
 ## Usage
 
-### NetLinx Compile Support
+### netlinx-compile Support
 
-Installing this gem automatically enables support for [NetLinx Compile](https://github.com/amclain/netlinx-compile)
+Installing this gem automatically enables support for [netlinx-compile](https://github.com/amclain/netlinx-compile)
 to compile NetLinx Studio workspace (.apw) files.
 
 
 ### Rake Tasks
 
-NetLinx Workspace comes with a set of rake tasks that can be used by adding
+netlinx-workspace comes with a set of rake tasks that can be used by adding
 `require 'netlinx/rake/workspace'` to your project's Rakefile. Type
 `rake --tasks` on the command line to view the available tasks.
 
 
 ### Command Line
 
-`netlinx-workspace` is available from the command line; a list of options can
+netlinx-workspace is available from the command line. A list of options can
 be displayed by executing `netlinx-workspace --help`.
 
 
 ### Ruby Developer API
 
-A Ruby API is provided for developers looking to integrate the NetLinx Workspace
+A Ruby API is provided for developers looking to integrate the netlinx-workspace
 library into thier own tools. See the 
-[NetLinx Workspace API documentation](http://rubydoc.info/gems/netlinx-workspace).
+[netlinx-workspace API documentation](http://rubydoc.info/gems/netlinx-workspace).
 
 
 ## YAML Workspace Configuration
 
-NetLinx Workspace has the ability to generate a NetLinx Studio Workspace (.apw)
+netlinx-workspace has the ability to generate a NetLinx Studio Workspace (.apw)
 file from a `workspace.config.yaml` text file. The advantage of using [YAML](http://yaml.org/spec/1.1/#id857168)
 is that a workspace can easily be defined and maintained without the use of a
 proprietary GUI editor. This means developers are free to use whichever text
