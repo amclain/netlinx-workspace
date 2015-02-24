@@ -12,6 +12,10 @@ This library provides a developer API for working with NetLinx Studio workspaces
 in Ruby. It also adds compiler support to the [NetLinx Compile](https://sourceforge.net/p/netlinx-compile/wiki/Home/)
 gem for these workspaces.
 
+**APW Target Version**
+
+This library targets NetLinx .apw version `4.0` (created by NetLinx Studio 4).
+
 
 ## Installation
 
