@@ -31,20 +31,27 @@ and type:
 
 ## Use
 
-**NetLinx Compile Support**
+### NetLinx Compile Support
 
-Installing this gem automatically enables support for NetLinx Compile to compile
-NetLinx Studio workspace (.apw) files.
+Installing this gem automatically enables support for [NetLinx Compile](https://github.com/amclain/netlinx-compile)
+to compile NetLinx Studio workspace (.apw) files.
 
 
-**Ruby Developer API**
+### Rake Tasks
+
+NetLinx Workspace comes with a set of rake tasks that can be used by adding
+`require 'netlinx/rake/workspace'` to your project's Rakefile. Type
+`rake --tasks` on the command line to view the available tasks.
+
+
+### Command Line
+
+`netlinx-workspace` is available from the command line; a list of options can
+be displayed by executing `netlinx-workspace --help`.
+
+
+### Ruby Developer API
 
 A Ruby API is provided for developers looking to integrate the NetLinx Workspace
-library into thier own tools.
-[NetLinx Workspace API Documentation](http://rubydoc.info/gems/netlinx-workspace)
-
-
-## Status
-
-This tool is known to be stable when integrated with netlinx-compile.
-API features are still in development.
+library into thier own tools. See the 
+[NetLinx Workspace API documentation](http://rubydoc.info/gems/netlinx-workspace).
