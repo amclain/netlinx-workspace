@@ -1,0 +1,3 @@
+PROGRAM_NAME='device_map'
+DEFINE_DEVICE
+dvTP_1 = 10001:1:0;

@@ -145,6 +145,21 @@ describe NetLinx::Workspace do
     subject.should_not include File.expand_path('does-not-exist.axi', workspace_path)
   end
   
+  describe "device map" do
+    subject { NetLinx::Workspace.new file: "#{workspace_path}/#{apw}.apw" }
+    let(:apw) { 'device_map' }
+    let(:workspace_path) { 'spec/workspace/apw' }
+    let(:touch_panel_file) {
+      subject.projects.first.systems.first.files
+        .select { |f| f.path == 'device_map.tp4' }.first
+    }
+    
+    specify do
+      touch_panel_file.devices[0].should eq '10002:1:0'
+      touch_panel_file.devices[1].should eq 'dvTP_1'
+    end
+  end
+  
   describe "workspace search" do
     subject { NetLinx::Workspace }
     
@@ -227,7 +242,7 @@ describe NetLinx::Workspace do
       }
       
       let(:dps_1) { '10001:1:0' }
-      let(:dps_2) { '10002:1:0' }
+      let(:dps_2) { 'dvTP_2' }
       
       before { project << system; system << file }
       

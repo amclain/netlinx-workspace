@@ -54,7 +54,7 @@ module NetLinx
         
         @devices.each do |dps|
           file.add_element('DeviceMap').tap do |e|
-            text = "Custom [#{dps}]"
+            text = dps.include?(':') ? "Custom [#{dps}]" : dps
             e.attributes['DevAddr'] = text
             e.add_element('DevName').text = text
           end
@@ -87,7 +87,10 @@ module NetLinx
       @description = system_file.elements['Comments'].text || ''
       
       system_file.each_element 'DeviceMap' do |device_map|
-        @devices << device_map.attributes['DevAddr'].match(/.*?\[(.*?)\]/)[1]
+        dev_addr = device_map.attributes['DevAddr']
+        @devices.push dev_addr.include?(':') ?
+          dev_addr.match(/.*?\[(.*?)\]/)[1] :
+          dev_addr
       end
     end
     
