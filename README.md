@@ -55,3 +55,31 @@ be displayed by executing `netlinx-workspace --help`.
 A Ruby API is provided for developers looking to integrate the NetLinx Workspace
 library into thier own tools. See the 
 [NetLinx Workspace API documentation](http://rubydoc.info/gems/netlinx-workspace).
+
+
+## YAML Workspace Configuration
+
+NetLinx Workspace has the ability to generate a NetLinx Studio Workspace (.apw)
+file from a `workspace.config.yaml` text file. The advantage to using [YAML](http://yaml.org/spec/1.1/#id857168)
+is that a workspace can easily be defined and maintained without the use of a
+proprietary GUI editor. This means developers are free to use whichever text
+editor they please, like [sublime-netlinx](https://github.com/amclain/sublime-netlinx),
+to maintain a NetLinx workspace. Automated tools can generate, maintain, and
+analyze these files as well.
+
+To generate a template workspace config file, type `netlinx-workspace --create`.
+
+```yaml
+systems:
+  -
+    name: Client - Room
+    connection: 192.168.1.2
+    touch_panels:
+      -
+        path: Touch Panel.TP4
+        dps: '10001:1:0'
+    ir:
+      -
+        path: IR.irl
+        dps: '5001:1:0'
+```
