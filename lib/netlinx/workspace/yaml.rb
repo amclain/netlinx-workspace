@@ -40,7 +40,7 @@ module NetLinx
               include_path = 'include/**/*.axi'
               include_path = "#{root}/#{include_path}" if root
               include_files = Dir[include_path]
-              include_files -= yaml_excluded_files if yaml_excluded_files
+              include_files -= Dir[*yaml_excluded_files] if yaml_excluded_files
               include_files.each do |file_path|
                 add_file_to_system system, file_path, :include
               end
@@ -53,6 +53,29 @@ module NetLinx
                 
                 files.each do |file_path|
                   add_file_to_system system, file_path, :include
+                end
+              end
+              
+              # Auto-include 'module' directory.
+              module_path = 'module/**/*.{tko,jar}'
+              module_path = "#{root}/#{module_path}" if root
+              module_files = Dir[module_path]
+              module_files -= Dir[*yaml_excluded_files] if yaml_excluded_files
+              module_files.each do |file_path|
+                add_file_to_system system, file_path, 
+                  (File.extname(file_path) == '.jar') ?
+                    :duet :
+                    File.extname(file_path)[1..-1].downcase.to_sym
+              end
+              
+              # Additional module paths.
+              yaml_files = yaml_system['modules']
+              if yaml_files
+                files = Dir[*yaml_files]
+                files -= Dir[*yaml_excluded_files] if yaml_excluded_files
+                
+                files.each do |file_path|
+                  add_file_to_system system, file_path, File.extname(file_path)[1..-1].downcase.to_sym
                 end
               end
               

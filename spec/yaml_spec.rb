@@ -51,6 +51,22 @@ describe NetLinx::Workspace::YAML do
           file_list.should include 'include/projector.axi'
           file_list['include/projector.axi'].type.should eq :include
           
+          file_list.should include 'module/duet-lib-pjlink_dr0_1_1.jar'
+          file_list['module/duet-lib-pjlink_dr0_1_1.jar'].type.should eq :duet
+          file_list['module/duet-lib-pjlink_dr0_1_1.jar'].name.should eq 'duet-lib-pjlink_dr0_1_1'
+          
+          file_list.should include 'module/tuner.tko'
+          file_list['module/tuner.tko'].type.should eq :tko
+          file_list['module/tuner.tko'].name.should eq 'tuner'
+          
+          file_list.should include 'module/video_wall.tko'
+          file_list['module/video_wall.tko'].type.should eq :tko
+          file_list['module/video_wall.tko'].name.should eq 'video_wall'
+          
+          file_list.should include 'module2/additional_module.tko'
+          file_list['module2/additional_module.tko'].type.should eq :tko
+          file_list['module2/additional_module.tko'].name.should eq 'additional_module'
+          
           file_list.should include 'ir/Comcast,Comcast,xfinity,Unknown,1.irl'
           file_list['ir/Comcast,Comcast,xfinity,Unknown,1.irl'].tap do |file|
             file.type.should eq :ir
@@ -85,6 +101,11 @@ describe NetLinx::Workspace::YAML do
           file_list.should_not include 'exclude/do_not_include.irl'
           file_list.should_not include 'exclude/do_not_include.TP4'
           file_list.should_not include 'include/excluded_file.axi'
+          file_list.should_not include 'module/excluded_module.axs'
+          file_list.should_not include 'module/excluded_module.tko'
+          # Do not include source; modules must be compiled.
+          file_list.should_not include 'module/tuner.axs'
+          file_list.should_not include 'module/additional_module.axs'
         end
       end
       
