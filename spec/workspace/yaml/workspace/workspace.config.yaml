@@ -1,0 +1,34 @@
+name: Workspace Config
+description: Workspace description.
+
+projects:
+  -
+    name: Production
+    designer: Test Designer
+    dealer: 123
+    sales_order: 456
+    purchase_order: 789
+    description: Project description.
+    systems:
+      -
+        name: Room 101
+        root: room_101
+        connection: 192.168.1.2
+        touch_panels:
+          - path: Room_101.TP4
+            dps:  '10001:1:1'
+      -
+        name: Room 201
+        root: room_201
+        connection: 192.168.1.3
+        touch_panels:
+          - path: Room_201.TP4
+            dps:  '10002:1:2'
+  -
+    name: Test Suite
+    systems:
+      -
+        name: Test Suite
+        active: true
+        root: test_suite
+        connection: 192.168.253.2

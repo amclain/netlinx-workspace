@@ -252,9 +252,104 @@ describe NetLinx::Workspace::YAML do
     
     describe "workspace" do
       let(:file) { 'workspace' }
-      specify
-      specify "test included files"
-      specify "device mapping"
+      specify do
+        workspace.name.should eq 'Workspace Config'
+        workspace.description.should eq 'Workspace description.'
+        
+        workspace.projects.count.should eq 2
+        
+        workspace.projects[0].tap do |project|
+          project.systems.count.should eq 2
+          
+          project.name.should           eq 'Production'
+          project.description.should    eq 'Project description.'
+          project.designer.should       eq 'Test Designer'
+          project.dealer.should         eq '123'
+          project.sales_order.should    eq '456'
+          project.purchase_order.should eq '789'
+          
+          project.systems[0].tap do |system|
+            system.name.should eq 'Room 101'
+            system.active.should eq false
+            system.id.should eq 0
+            system.description.should eq ''
+            system.ip_address.should eq '192.168.1.2'
+            system.ip_port.should eq 1319
+            
+            Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+              file_list.should include 'room_101/Room 101.axs'
+              file_list['room_101/Room 101.axs'].type.should eq :master
+              file_list['room_101/Room 101.axs'].name.should eq system.name
+              
+              file_list.should include 'room_101/include/matrix.axi'
+              file_list['room_101/include/matrix.axi'].type.should eq :include
+              file_list['room_101/include/matrix.axi'].name.should eq 'matrix'
+              
+              file_list.should include 'room_101/touch_panel/Room_101.TP4'
+              file_list['room_101/touch_panel/Room_101.TP4'].tap do |file|
+                file.type.should eq :tp4
+                file.devices.should eq ['10001:1:1']
+              end
+            end
+          end
+          
+          project.systems[1].tap do |system|
+            system.name.should eq 'Room 201'
+            system.active.should eq false
+            system.id.should eq 0
+            system.description.should eq ''
+            system.ip_address.should eq '192.168.1.3'
+            system.ip_port.should eq 1319
+            
+            Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+              file_list.should include 'room_201/Room 201.axs'
+              file_list['room_201/Room 201.axs'].type.should eq :master
+              file_list['room_201/Room 201.axs'].name.should eq system.name
+              
+              file_list.should include 'room_201/include/switcher.axi'
+              file_list['room_201/include/switcher.axi'].type.should eq :include
+              file_list['room_201/include/switcher.axi'].name.should eq 'switcher'
+              
+              file_list.should include 'room_201/touch_panel/Room_201.TP4'
+              file_list['room_201/touch_panel/Room_201.TP4'].tap do |file|
+                file.type.should eq :tp4
+                file.devices.should eq ['10002:1:2']
+              end
+            end
+          end
+          
+          workspace.projects[1].tap do |project|
+            project.systems.count.should eq 1
+            
+            project.name.should           eq 'Test Suite'
+            project.description.should    eq ''
+            project.designer.should       eq ''
+            project.dealer.should         eq ''
+            project.sales_order.should    eq ''
+            project.purchase_order.should eq ''
+            
+            project.systems[0].tap do |system|
+              system.name.should eq 'Test Suite'
+              system.active.should eq true
+              system.id.should eq 0
+              system.description.should eq ''
+              system.ip_address.should eq '192.168.253.2'
+              system.ip_port.should eq 1319
+              
+              Hash[system.files.map { |f| [f.path, f] }].tap do |file_list|
+                file_list.should include 'test_suite/Test Suite.axs'
+                file_list['test_suite/Test Suite.axs'].type.should eq :master
+                file_list['test_suite/Test Suite.axs'].name.should eq system.name
+                
+                file_list.should include 'test_suite/include/test_harness.axi'
+                file_list['test_suite/include/test_harness.axi'].type.should eq :include
+                file_list['test_suite/include/test_harness.axi'].name.should eq 'test_harness'
+              end
+            end
+          end
+          
+        end
+      end
     end
     
     describe "warn on nonexistent file" do

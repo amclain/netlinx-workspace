@@ -21,6 +21,22 @@ module NetLinx
           parse_systems project, yaml_systems
         else
           # An explicit workspace is defined.
+          workspace.name = yaml['name'] if yaml['name']
+          workspace.description = yaml['description'] if yaml['description']
+          
+          yaml_projects = yaml['projects']
+          yaml_projects.each do |yaml_project|
+            workspace << NetLinx::Project.new.tap do |project|
+              project.name           = yaml_project['name'] if yaml_project['name']
+              project.designer       = yaml_project['designer'].to_s if yaml_project['designer']
+              project.dealer         = yaml_project['dealer'].to_s if yaml_project['dealer']
+              project.sales_order    = yaml_project['sales_order'].to_s if yaml_project['sales_order']
+              project.purchase_order = yaml_project['purchase_order'].to_s if yaml_project['purchase_order']
+              project.description    = yaml_project['description'] if yaml_project['description']
+              
+              parse_systems project, yaml_project['systems']
+            end
+          end
         end
         
         # Ensure exactly one system in the workspace is set active.
@@ -37,7 +53,10 @@ module NetLinx
         end
         
         # No active systems. Set the first one active automatically.
-        workspace.projects.first.systems.first.active = true unless a_system_is_active
+        workspace.projects.first.systems.first.active = true \
+          unless a_system_is_active \
+          or workspace.projects.empty? \
+          or workspace.projects.first.systems.empty?
         
         workspace
       end
