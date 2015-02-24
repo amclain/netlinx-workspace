@@ -65,7 +65,7 @@ is that a workspace can easily be defined and maintained without the use of a
 proprietary GUI editor. This means developers are free to use whichever text
 editor they please, like [sublime-netlinx](https://github.com/amclain/sublime-netlinx),
 to maintain a NetLinx workspace. Automated tools can generate, maintain, and
-analyze these files as well.
+analyze this file as well.
 
 To generate a template workspace config file, execute `netlinx-workspace --create`.
 
@@ -153,6 +153,39 @@ room_201/touch_panel/
 room_201/Room 201.axs
 
 workspace.config.yaml
+```
+
+
+### Connection Settings
+
+The `connection` key supports a variety of options for configuring a system's
+connection to the master controller:
+
+```yaml
+# IP address. Default ICSLan port 1319 is used.
+connection: 192.168.1.2
+
+# IP address with specific ICSLan port number.
+connection: 192.168.1.2:1234
+
+# IP address with specific ICSLan port number.
+connection:
+  host: 192.168.1.2
+  port: 1234
+
+# Serial port. Default baud rate 38,400 is used.
+connection: COM2
+
+# Serial port with baud rate.
+connection: COM2:57600
+
+# Serial port with multiple port settings.
+connection:
+  port: com2
+  baud_rate: 115200
+  data_bits: 7
+  parity: even
+  stop_bits: 2
 ```
 
 
