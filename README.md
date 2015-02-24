@@ -60,14 +60,14 @@ library into thier own tools. See the
 ## YAML Workspace Configuration
 
 NetLinx Workspace has the ability to generate a NetLinx Studio Workspace (.apw)
-file from a `workspace.config.yaml` text file. The advantage to using [YAML](http://yaml.org/spec/1.1/#id857168)
+file from a `workspace.config.yaml` text file. The advantage of using [YAML](http://yaml.org/spec/1.1/#id857168)
 is that a workspace can easily be defined and maintained without the use of a
 proprietary GUI editor. This means developers are free to use whichever text
 editor they please, like [sublime-netlinx](https://github.com/amclain/sublime-netlinx),
 to maintain a NetLinx workspace. Automated tools can generate, maintain, and
 analyze these files as well.
 
-To generate a template workspace config file, type `netlinx-workspace --create`.
+To generate a template workspace config file, execute `netlinx-workspace --create`.
 
 ```yaml
 systems:
@@ -77,9 +77,88 @@ systems:
     touch_panels:
       -
         path: Touch Panel.TP4
-        dps: '10001:1:0'
+        dps:  10001:1:0
     ir:
       -
         path: IR.irl
-        dps: '5001:1:0'
+        dps:  5001:1:0
 ```
+
+
+### Directory Structure
+
+In order to simplify the configuration file, assumptions are made as to where
+project files are located:
+
+```text
+include/
+ir/
+module/
+touch_panel/
+system_name.axs
+workspace.config.yaml
+```
+
+The `include` directory is automatically scanned for `.axi` files, and the
+`module` directory is scanned for `.tko` and `.jar` files. `.axs` modules are
+ignored, as they should be tested and compiled independently before being
+included in a project. However, it is encouraged to place the `.axs` module
+source code file in the module directory as a courtesy so that other developers
+can fix bugs and make updates if necessary.
+
+Since touch panel and IR files can have a device address (DPS) attached, these
+files are explicitly listed in the system. Multiple addresses can be defined
+by using a YAML array.
+
+```yaml
+ir:
+  -
+    path: Cable Box.irl
+    dps: ['5001:5:0', '5001:6:0', '5001:7:0', '5001:8:0']
+```
+
+In the case of multiple systems, the root directory of each system may need to
+be offset from the workspace directory. This can be achieved by using the `root`
+key.
+
+```yaml
+systems:
+  -
+    name: Room 101
+    root: room_101
+    connection: 192.168.1.2
+    touch_panels:
+      - path: Room_101.TP4
+        dps:  10001:1:1
+  -
+    name: Room 201
+    root: room_201
+    connection: 192.168.1.3
+    touch_panels:
+      - path: Room_201.TP4
+        dps:  10002:1:2
+```
+
+```text
+room_101/include/
+room_101/ir/
+room_101/module/
+room_101/touch_panel/
+room_101/Room 101.axs
+
+room_201/include/
+room_201/ir/
+room_201/module/
+room_201/touch_panel/
+room_201/Room 201.axs
+
+workspace.config.yaml
+```
+
+
+### Additional Information
+
+Examples of workspace configuration files can be found in the
+[spec\workspace\yaml](https://github.com/amclain/netlinx-workspace/tree/master/spec/workspace/yaml)
+directory of this library. These files show all of the keywords that are
+available.
