@@ -4,7 +4,7 @@ systems:
     connection: 192.168.1.2
     touch_panels:
       - path: Production.TP4
-        dps:  '10001:1:0'
+        dps:  10001:1:0
   -
     name: Test Suite
     active: true # First system defaults to active if not specified.
@@ -27,10 +27,10 @@ systems:
     connection: COM2:57600
     touch_panels:
       - path: Serial Connection 2.TP4
-        dps:  '10004:1:0'
+        dps:  10004:1:0
     ir:
       - path: Serial Connection 2.irl
-        dps:  '5004:1:0'
+        dps:  5004:1:0
   -
     name: Serial Connection 3
     root: serial_connection_3

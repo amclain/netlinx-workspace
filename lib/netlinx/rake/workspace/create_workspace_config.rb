@@ -33,11 +33,11 @@ systems:
     touch_panels:
       -
         path: Touch Panel.TP4
-        dps: '10001:1:0'
+        dps: 10001:1:0
     ir:
       -
         path: IR.irl
-        dps: '5001:1:0'
+        dps: 5001:1:0
 EOS
             end
           end

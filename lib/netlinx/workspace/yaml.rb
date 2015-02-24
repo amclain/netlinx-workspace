@@ -85,12 +85,13 @@ module NetLinx
       
       def self.attach_devices system_file, yaml_node
         devices = yaml_node['dps']
+        return unless devices
         
-        case devices
-        when String
-          system_file.devices = [devices]
-        when Array
-          system_file.devices = devices
+        devices = [devices] unless devices.is_a? Array
+        
+        system_file.devices = devices.map do |d|
+          # Convert to string if YAML parses the DPS as date/time.
+          d.is_a?(String) ? d : [d / 3600, d % 3600 / 60, d % 60].join(':')
         end
       end
       

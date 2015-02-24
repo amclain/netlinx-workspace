@@ -16,14 +16,14 @@ projects:
         connection: 192.168.1.2
         touch_panels:
           - path: Room_101.TP4
-            dps:  '10001:1:1'
+            dps:  10001:1:1
       -
         name: Room 201
         root: room_201
         connection: 192.168.1.3
         touch_panels:
           - path: Room_201.TP4
-            dps:  '10002:1:2'
+            dps:  10002:1:2
   -
     name: Test Suite
     systems:
