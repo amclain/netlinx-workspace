@@ -17,23 +17,38 @@ gem for these workspaces.
 This library targets NetLinx .apw version `4.0` (created by NetLinx Studio 4).
 
 
+## Issues, Bugs, Feature Requests
+
+Any bugs and feature requests should be reported on the GitHub issue tracker:
+
+https://github.com/amclain/netlinx-workspace/issues
+
+
+**Pull requests are preferred via GitHub.**
+
+Mercurial users can use [Hg-Git](http://hg-git.github.io/) to interact with
+GitHub repositories.
+
+
 ## Installation
 
 netlinx-workspace is available as a Ruby gem.
 
-1. Install [Ruby](http://www.ruby-lang.org/en/downloads/) v2.0 or greater.
-(For Windows use [RubyInstaller](http://rubyinstaller.org/) and make sure
-ruby/bin is in your [system path](http://www.computerhope.com/issues/ch000549.htm).)
-
+1. Install [Ruby](https://www.ruby-lang.org) 2.0.0 or higher.
+    * Windows: Use [RubyInstaller](http://rubyinstaller.org/downloads/)
+        and make sure ruby/bin is in your [system path](http://www.computerhope.com/issues/ch000549.htm).
+    * Linux: Use [rbenv](https://github.com/sstephenson/rbenv#basic-github-checkout).
+    
 2. Open the [command line](http://www.addictivetips.com/windows-tips/windows-7-elevated-command-prompt-in-context-menu/)
-and type:
+    and type:
+    
 ```
     gem install netlinx-workspace
     gem install netlinx-compile (optional for compiler support)
 ```
 
 
-## Use
+## Usage
 
 ### NetLinx Compile Support
 
