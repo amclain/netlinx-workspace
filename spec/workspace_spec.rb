@@ -35,66 +35,86 @@ describe NetLinx::Workspace do
     project.workspace.should eq subject
   end
   
-  it "exposes a directory path that the workspace resides in" do
-    subject = NetLinx::Workspace.new \
-      file: File.expand_path('import-test.apw', workspace_path)
+  describe "imported from apw file" do
+    subject {
+      NetLinx::Workspace.new \
+        file: File.expand_path('import-test.apw', workspace_path)
+    }
+    
+    it "exposes a directory path that the workspace resides in" do
+      subject.path.should eq File.dirname(File.expand_path('import-test.apw', workspace_path))
+    end
+    
+    it "exposes the path to the .apw workspace file" do
+      subject.file.should eq File.expand_path('import-test.apw', workspace_path)
+    end
+    
+    it "can be initialized from a .apw file" do
+      # Import the test project.
+      subject.name.should eq 'import-test'
+      subject.description.should eq 'For testing Ruby import.'
       
-    subject.path.should eq File.dirname(File.expand_path('import-test.apw', workspace_path))
-  end
-  
-  it "exposes the path to the .apw workspace file" do
-    subject = NetLinx::Workspace.new \
-      file: File.expand_path('import-test.apw', workspace_path)
+      # Check project data.
+      subject.projects.count.should eq 1
+      project = subject.projects.first
       
-    subject.file.should eq File.expand_path('import-test.apw', workspace_path)
-  end
-  
-  it "can be initialized from a .axw file" do
-    # Import the test project.
-    subject = NetLinx::Workspace.new \
-      file: File.expand_path('import-test.apw', workspace_path)
+      project.name.should eq           'import-test-project'
+      project.dealer.should eq         'Test Dealer'
+      project.designer.should eq       'Test Designer'
+      project.sales_order.should eq    'Test Sales Order'
+      project.purchase_order.should eq 'Test PO'
+      project.description.should eq    'Test project description.'
       
-    subject.name.should eq 'import-test'
-    subject.description.should eq 'For testing Ruby import.'
+      # Check system data.
+      project.systems.count.should eq 1
+      system = project.systems.first
+      
+      system.name.should eq        'import-test-system'
+      system.id.should eq          0
+      system.description.should eq 'Test system description.'
+      
+      # Contains the MasterSrc file to be compiled.
+      system.compiler_target_files.should include \
+        File.expand_path('import-test.axs', workspace_path)
+      
+      # Contains include paths.
+      system.compiler_include_paths.should include \
+        File.expand_path('include', workspace_path)
+      
+      # Contains module paths.
+      system.compiler_module_paths.should include \
+        File.expand_path('duet-module', workspace_path)
+      
+      # Contains compiled module path.
+      system.compiler_module_paths.should include \
+        File.expand_path('module-compiled', workspace_path)
+      
+      # Contains compiled module path.
+      system.compiler_module_paths.should include \
+        File.expand_path('module-source', workspace_path)
+    end
     
-    # Check project data.
-    subject.projects.count.should eq 1
-    project = subject.projects.first
-    
-    project.name.should eq           'import-test-project'
-    project.dealer.should eq         'Test Dealer'
-    project.designer.should eq       'Test Designer'
-    project.sales_order.should eq    'Test Sales Order'
-    project.purchase_order.should eq 'Test PO'
-    project.description.should eq    'Test project description.'
-    
-    # Check system data.
-    project.systems.count.should eq 1
-    system = project.systems.first
-    
-    system.name.should eq        'import-test-system'
-    system.id.should eq          0
-    system.description.should eq 'Test system description.'
-    
-    # Contains the MasterSrc file to be compiled.
-    system.compiler_target_files.should include \
-      File.expand_path('import-test.axs', workspace_path)
-    
-    # Contains include paths.
-    system.compiler_include_paths.should include \
-      File.expand_path('include', workspace_path)
-    
-    # Contains module paths.
-    system.compiler_module_paths.should include \
-      File.expand_path('duet-module', workspace_path)
-    
-    # Contains compiled module path.
-    system.compiler_module_paths.should include \
-      File.expand_path('module-compiled', workspace_path)
-    
-    # Contains compiled module path.
-    system.compiler_module_paths.should include \
-      File.expand_path('module-source', workspace_path)
+    it "can check if a file is included in the workspace" do
+      subject.should respond_to :include?
+      
+      # Can find file by relative path.
+      subject.should include 'import-test.axs'
+      
+      # Can find file by absolute path.  
+      subject.should include File.expand_path('include/import-include.axi', workspace_path)
+      
+      # Can find file by element name.
+      subject.should include 'import-test'
+      
+      # Returns false for an element name that doesn't exist.  
+      subject.should_not include 'does-not-exist'
+      
+      # Returns false for a relative path that doesn't exist.
+      subject.should_not include 'does-not-exist.axs'
+      
+      # Returns false for an absolute path that doesn't exist.
+      subject.should_not include File.expand_path('does-not-exist.axi', workspace_path)
+    end
   end
   
   describe "can invoke the compiler on itself" do
@@ -118,31 +138,6 @@ describe NetLinx::Workspace do
       
       subject.compile
     end
-  end
-  
-  it "can check if a file is included in the workspace" do
-    subject = NetLinx::Workspace.new \
-      file: File.expand_path('import-test.apw', workspace_path)
-    
-    subject.should respond_to :include?
-    
-    # Can find file by relative path.
-    subject.should include 'import-test.axs'
-    
-    # Can find file by absolute path.  
-    subject.should include File.expand_path('include/import-include.axi', workspace_path)
-    
-    # Can find file by element name.
-    subject.should include 'import-test'
-    
-    # Returns false for an element name that doesn't exist.  
-    subject.should_not include 'does-not-exist'
-    
-    # Returns false for a relative path that doesn't exist.
-    subject.should_not include 'does-not-exist.axs'
-    
-    # Returns false for an absolute path that doesn't exist.
-    subject.should_not include File.expand_path('does-not-exist.axi', workspace_path)
   end
   
   describe "device map" do
