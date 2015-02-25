@@ -16,14 +16,25 @@ module NetLinx
     attr_reader   :file
     
     # Search backwards through directory tree and return the first workspace found.
+    # @return [NetLinx::Workspace]
     def self.search dir: nil
+      yaml_config_file_name = 'workspace.config.yaml'
+      
       dir ||= File.expand_path '.'
       while dir != File.expand_path('..', dir)
-        workspaces = Dir["#{dir}/*.apw"]
+        workspace_files = Dir["#{dir}/{#{yaml_config_file_name},*.apw}"]
         dir = File.expand_path('..', dir)
-        next if workspaces.empty?
+        next if workspace_files.empty?
         
-        return new file: workspaces.first
+        workspace_files.first.tap do |workspace_file|
+          if workspace_file.end_with? "/#{yaml_config_file_name}"
+            Dir.chdir File.dirname(workspace_file) do
+              return NetLinx::Workspace::YAML.parse_file yaml_config_file_name
+            end
+          else
+            return new file: workspace_files.first
+          end
+        end
       end
       
       nil

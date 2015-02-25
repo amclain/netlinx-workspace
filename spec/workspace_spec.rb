@@ -156,19 +156,23 @@ describe NetLinx::Workspace do
   end
   
   describe "workspace search" do
-    subject { NetLinx::Workspace }
-    
-    let(:subpath) { "#{workspace_path}/include" }
+    subject { NetLinx::Workspace.search dir: subpath }
+    let(:subpath)   { "#{workspace_path}/include" }
     
     it "can find workspace" do
-      workspace = subject.search dir: subpath
-      
-      workspace.should be_a NetLinx::Workspace
-      workspace.path.should eq File.expand_path(workspace_path)
+      subject.should be_a NetLinx::Workspace
+      subject.name.should eq 'import-test'
+      subject.path.should eq File.expand_path(workspace_path)
     end
     
-    it "returns nil if no workspace found" do
-      subject.search(dir: '/').should be nil
+    describe "returns nil if no workspace found" do
+      let(:subpath) { '/' }
+      specify { subject.should be nil }
+    end
+    
+    describe "favors yaml config over apw" do
+      let(:subpath) { "spec/workspace/workspace_search/favor_yaml" }
+      specify { subject.name.should eq 'yaml_config_file' }
     end
   end
   

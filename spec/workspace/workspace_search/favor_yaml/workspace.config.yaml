@@ -1,0 +1,4 @@
+systems:
+  -
+    name: yaml_config_file
+    connection: 192.168.1.2
