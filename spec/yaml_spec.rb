@@ -22,9 +22,15 @@ describe NetLinx::Workspace::YAML do
     
     around { |test| Dir.chdir("spec/workspace/yaml/#{file}") { test.run } }
     
+    shared_examples "file name should be workspace name" do
+      its(:file) { should eq "#{workspace.name}.apw" }
+    end
+    
     describe "single system" do
       let(:file) { 'single_system' }
       let(:name) { 'MyClient Conference Room' }
+      
+      include_examples "file name should be workspace name"
       
       specify do
         workspace.name.should eq name
@@ -117,6 +123,8 @@ describe NetLinx::Workspace::YAML do
     describe "multiple systems" do
       let(:file) { 'multiple_systems' }
       let(:name) { 'Production' }
+      
+      include_examples "file name should be workspace name"
       
       specify do
         workspace.name.should eq name
@@ -252,6 +260,9 @@ describe NetLinx::Workspace::YAML do
     
     describe "workspace" do
       let(:file) { 'workspace' }
+      
+      include_examples "file name should be workspace name"
+      
       specify do
         workspace.name.should eq 'Workspace Config'
         workspace.description.should eq 'Workspace description.'

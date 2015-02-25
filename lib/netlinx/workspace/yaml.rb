@@ -39,6 +39,8 @@ module NetLinx
           end
         end
         
+        workspace.file = "#{workspace.name}.apw"
+        
         # Ensure exactly one system in the workspace is set active.
         a_system_is_active = false
         workspace.projects.each do |project|

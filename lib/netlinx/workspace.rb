@@ -13,7 +13,7 @@ module NetLinx
     attr_accessor :name
     attr_accessor :description
     attr_accessor :projects
-    attr_reader   :file
+    attr_accessor :file
     
     # Search backwards through directory tree and return the first workspace found.
     # @return [NetLinx::Workspace]
