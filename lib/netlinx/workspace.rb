@@ -85,7 +85,7 @@ module NetLinx
       
       @projects.map do |project|
         project.systems.select do |system|
-          ENV['NETLINX_WORKSPACE_COMPILE_ACTIVE_SYSTEM'] ? system.active : true
+          ENV['NETLINX_ACTIVE_SYSTEM_ONLY'] ? system.active : true
         end
       end.flatten.each do |system|
         system.compile.each { |result| compiler_results << result }

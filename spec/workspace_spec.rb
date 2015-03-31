@@ -118,7 +118,7 @@ describe NetLinx::Workspace do
   end
   
   describe "can invoke the compiler" do
-    let(:env_compile_active_system) { 'NETLINX_WORKSPACE_COMPILE_ACTIVE_SYSTEM' }
+    let(:env_compile_active_system) { 'NETLINX_ACTIVE_SYSTEM_ONLY' }
     
     let(:project) { NetLinx::Project.new name: 'Test Project' }
     let(:system_1) { NetLinx::System.new name: 'Test System 1' }
