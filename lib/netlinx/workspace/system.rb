@@ -92,9 +92,10 @@ module NetLinx
       REXML::Element.new('System').tap do |system|
         system.attributes['IsActive']  = active
         system.attributes['Platform']  = 'Netlinx'
-        system.attributes['Transport'] = 'Serial'
-        system.attributes['TransportEx'] =
-          (ip_address == '0.0.0.0') ? 'Serial' : 'TCPIP'
+        transport = (ip_address == '0.0.0.0') ? 'Serial' : 'TCPIP'
+        system.attributes['Transport'] = transport
+        system.attributes['TransportEx'] = transport
+          
         
         system.add_element('Identifier').tap { |e| e.text = name }
         system.add_element('SysID').tap { |e| e.text = id }
@@ -102,8 +103,8 @@ module NetLinx
         
         # These don't seem to change in NetLinx Studio 4.0; possibly 3.x legacy.
         # The 'Ex' suffixes are used.
-        system.add_element('TransTCPIP').tap { |e| e.text = '0.0.0.0' }
-        system.add_element('TransSerial').tap { |e| e.text = 'COM1,38400,8,None,1,None' }
+        system.add_element('TransTCPIP').tap { |e| e.text = "#{ip_address},#{ip_port},#{ensure_availability ? 1 : 0},,," }
+        system.add_element('TransSerial').tap { |e| e.text = "#{com_port.upcase},#{baud_rate},#{data_bits},#{parity.capitalize},#{stop_bits},,," }
         
         # TODO: Generate communication settings.
         system.add_element('TransTCPIPEx').tap { |e|

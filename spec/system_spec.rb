@@ -236,19 +236,27 @@ describe NetLinx::System do
       element.elements['SysID'].first.should eq id
       element.elements['Comments'].first.should eq description
       
+      # These communication settings are important for FileTransfer 2 and
+      # NetLinx Studio <= 3
+      element.elements['TransTCPIP'].first.should eq "#{ip_address},1319,1,,,"
+      element.elements['TransSerial'].first.should eq "COM2,57600,8,None,1,,,"
+      
+      # These communication settings are important for NetLinx Studio 4.
       element.elements['TransTCPIPEx'].first.should eq "#{ip_address}|1319|1|||"
       element.elements['TransSerialEx'].first.should eq "COM2|57600|8|None|1|||"
       
       element.elements['File/Identifier'].first.should eq file_name
     end
     
-    describe "TransportEx" do
+    describe "Transport" do
       it "is TCPIP if IP address is specified" do
+        element.attributes['Transport'].should eq 'TCPIP'
         element.attributes['TransportEx'].should eq 'TCPIP'
       end
       
       it "is Serial if IP address is 0.0.0.0" do
         subject.ip_address = '0.0.0.0'
+        element.attributes['Transport'].should eq 'Serial'
         element.attributes['TransportEx'].should eq 'Serial'
       end
     end
