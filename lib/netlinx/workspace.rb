@@ -83,8 +83,12 @@ module NetLinx
     def compile
       compiler_results = []
       
-      @projects.each do |project|
-        project.compile.each {|result| compiler_results << result}
+      @projects.map do |project|
+        project.systems.select do |system|
+          ENV['NETLINX_WORKSPACE_COMPILE_ACTIVE_SYSTEM'] ? system.active : true
+        end
+      end.flatten.each do |system|
+        system.compile.each { |result| compiler_results << result }
       end
       
       compiler_results

@@ -117,11 +117,12 @@ describe NetLinx::Workspace do
     end
   end
   
-  describe "can invoke the compiler on itself" do
-    let(:project) { NetLinx::Project.new name: 'Test Project' }
+  describe "can invoke the compiler" do
+    let(:env_compile_active_system) { 'NETLINX_WORKSPACE_COMPILE_ACTIVE_SYSTEM' }
     
+    let(:project) { NetLinx::Project.new name: 'Test Project' }
     let(:system_1) { NetLinx::System.new name: 'Test System 1' }
-    let(:system_2) { NetLinx::System.new name: 'Test System 2' }
+    let(:system_2) { NetLinx::System.new name: 'Test System 2', active: true }
     
     before {
       subject << project
@@ -131,12 +132,29 @@ describe NetLinx::Workspace do
     
     it { should respond_to :compile }
     
-    specify do
+    specify "on all systems" do
       mock_compiler = double()
       NetLinx::Compiler.should_receive(:new).twice { mock_compiler }
       mock_compiler.should_receive(:compile).twice { [] }
       
+      system_1.should_receive(:compile).and_call_original
+      system_2.should_receive(:compile).and_call_original
+      
       subject.compile
+    end
+    
+    specify "on the active system" do
+      ENV[env_compile_active_system] = 'true'
+      
+      mock_compiler = double()
+      NetLinx::Compiler.should_receive(:new).once { mock_compiler }
+      mock_compiler.should_receive(:compile).once { [] }
+      
+      system_1.should_not_receive(:compile).and_call_original
+      system_2.should_receive(:compile).and_call_original
+      
+      subject.compile
+      ENV[env_compile_active_system] = nil
     end
   end
   
