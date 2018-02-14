@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage  = 'https://github.com/amclain/netlinx-workspace'
   s.authors   = ['Alex McLain']
   s.email     = ['alex@alexmclain.com']
-  s.license   = 'Apache 2.0'
+  s.license   = 'Apache-2.0'
   
   s.files     =
     [
@@ -24,12 +24,12 @@ Gem::Specification.new do |s|
   
   s.executables = ['netlinx-workspace']
   
-  s.add_development_dependency 'netlinx-compile', '~> 3.0'
+  s.add_development_dependency 'netlinx-compile', '~> 3.1'
   
-  s.add_development_dependency 'rake',      '~> 10.4'
-  s.add_development_dependency 'yard',      '~> 0.8.7'
-  s.add_development_dependency 'rspec',     '~> 3.2'
-  s.add_development_dependency 'rspec-its', '~> 1.1'
+  s.add_development_dependency 'rake',      '~> 12.3'
+  s.add_development_dependency 'yard',      '~> 0.9', '>= 0.9.11'
+  s.add_development_dependency 'rspec',     '~> 3.7'
+  s.add_development_dependency 'rspec-its', '~> 1.2'
   s.add_development_dependency 'fivemat',   '~> 1.3'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rb-readline'
